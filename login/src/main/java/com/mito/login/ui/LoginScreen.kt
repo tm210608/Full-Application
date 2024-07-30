@@ -188,7 +188,7 @@ fun MainImage(modifier: Modifier) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun LoginScreenPreview(){
-    LoginScreen()
+    LoginScreen(viewModel = LoginViewModel())
 }
 //@Preview(showBackground = true, showSystemUi = true)
 //@Composable
