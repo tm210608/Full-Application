@@ -53,6 +53,10 @@ android {
 }
 
 dependencies {
+    //noinspection KaptUsageInsteadOfKsp
+
+    //Libs
+    //implementation(":libs:database")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
