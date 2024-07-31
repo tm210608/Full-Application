@@ -5,7 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.mito.fullapplication.ui.theme.FullApplicationTheme
-import com.mito.login.ui.LoginActivity
+import com.mito.login.ui.LoginScreen
+import com.mito.login.ui.LoginViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,6 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FullApplicationTheme {
+                LoginScreen(viewModel = LoginViewModel())
             }
         }
     }

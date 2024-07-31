@@ -134,8 +134,8 @@ fun PasswordItem(password: String, onTextFieldChanged: (String) -> Unit) {
         maxLines = 1,
         shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.colors(
-            focusedTextColor = Color(0xFFB3BDA5),
-            unfocusedTextColor = Color(0xFFB3BDA5),
+            focusedTextColor = Color(0xFF21241D),
+            unfocusedTextColor = Color(0xFF394132),
             focusedContainerColor = Color(0xFF9AE485),
             unfocusedContainerColor = Color(0xFF9AE485),
             focusedIndicatorColor = Color.Transparent,
@@ -159,8 +159,8 @@ fun EmailItem(email: String, onTextFieldChanged: (String) -> Unit) {
         maxLines = 1,
         shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.colors(
-            focusedTextColor = Color.Blue,
-            unfocusedTextColor = Color(0xFF1C1D1B),
+            focusedTextColor = Color(0xFF21241D),
+            unfocusedTextColor = Color(0xFF394132),
             focusedContainerColor = Color(0xFF9AE485),
             unfocusedContainerColor = Color(0xFF9AE485),
             focusedIndicatorColor = Color.Transparent,

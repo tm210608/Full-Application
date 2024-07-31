@@ -8,7 +8,7 @@ class LoginActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LoginScreen(LoginViewModel())
+            LoginScreen(viewModel = LoginViewModel())
         }
     }
 }
