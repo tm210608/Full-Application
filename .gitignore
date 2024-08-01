@@ -13,3 +13,14 @@
 .externalNativeBuild
 .cxx
 local.properties
+/.idea/.name
+/.idea/compiler.xml
+/.idea/deploymentTargetSelector.xml
+/.idea/gradle.xml
+/.idea/kotlinc.xml
+/.idea/migrations.xml
+/.idea/misc.xml
+/.idea/other.xml
+/.idea/shelf/Uncommitted_changes_before_Update_at_31_7_24,_16_41_[Changes]/shelved.patch
+/.idea/shelf/Uncommitted_changes_before_Update_at_31_7_24__16_41__Changes_.xml
+/.idea/vcs.xml
