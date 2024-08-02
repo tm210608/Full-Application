@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class NetworkModule {
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
+    fun provideDummyRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(DUMMY_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -23,7 +23,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideLoginService(retrofit: Retrofit): LoginService {
+    fun provideDummyLoginService(retrofit: Retrofit): LoginService {
         return retrofit.create(LoginService::class.java)
     }
 

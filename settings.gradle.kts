@@ -24,5 +24,6 @@ include(
     ":app",
     ":login",
     ":libs:database",
-    ":libs:network"
+    ":libs:network",
+    ":libs:common"
 )
