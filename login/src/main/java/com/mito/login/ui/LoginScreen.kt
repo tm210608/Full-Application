@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -105,14 +106,14 @@ fun LoginButton(loginEnable: Boolean, onLoginSelected: () -> Unit) {
         enabled = loginEnable,
         shape = RoundedCornerShape(8.dp)
     ){
-        Text(text = "Iniciar Sesión")
+        Text(text = stringResource(id = R.string.login_text_field_intro_button))
     }
 }
 
 @Composable
 fun ForgotPassword(modifier: Modifier) {
     Text(
-        text = "¿Olvidaste la contraseña?",
+        text = stringResource(id = R.string.login_text_intro_forgot_password),
         modifier = modifier.clickable { },
         fontSize = 12.sp,
         fontWeight = FontWeight.Bold,
@@ -126,7 +127,7 @@ fun PasswordItem(password: String, onTextFieldChanged: (String) -> Unit) {
     TextField(
         value = password,
         onValueChange = {onTextFieldChanged(it)},
-        placeholder = { Text(text = "Contraseña: Escriba aquí") },
+        placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_password)) },
         modifier = Modifier.fillMaxWidth(),
         leadingIcon = { Icon(imageVector = Icons.Filled.Lock, contentDescription = null) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -152,7 +153,7 @@ fun EmailItem(email: String, onTextFieldChanged: (String) -> Unit) {
         value = email,
         onValueChange = {onTextFieldChanged(it)},
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text( text = "Email: Escriba aquí") },
+        placeholder = { Text( text = stringResource(id = R.string.login_text_field_intro_email)) },
         leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = null)},
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         singleLine = true,
@@ -173,7 +174,7 @@ fun EmailItem(email: String, onTextFieldChanged: (String) -> Unit) {
 fun MainImage(modifier: Modifier) {
     Image(
         painter = painterResource(id = R.drawable.main_image),
-        contentDescription = "imagen de cabecera",
+        contentDescription = stringResource(id = R.string.login_text_intro_header_content_description),
         contentScale = ContentScale.Crop,
         modifier = modifier
             .clip(CircleShape)
@@ -190,8 +191,3 @@ fun MainImage(modifier: Modifier) {
 fun LoginScreenPreview(){
     LoginScreen(viewModel = LoginViewModel())
 }
-//@Preview(showBackground = true, showSystemUi = true)
-//@Composable
-//fun EmailItemPreview(){
-//    EmailItem()
-//}
