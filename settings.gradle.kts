@@ -20,5 +20,10 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Full Application"
-include(":app", ":login",":libs:database")
-
+include(
+    ":app",
+    ":login",
+    ":libs:database",
+    ":libs:network",
+    ":libs:common"
+)

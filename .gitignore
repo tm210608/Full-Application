@@ -754,3 +754,14 @@ local.properties
 /login/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/supertypes.tab.values.at
 /login/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/supertypes.tab_i
 /login/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/jvm/kotlin/supertypes.tab_i.len
+/.idea/.name
+/.idea/compiler.xml
+/.idea/deploymentTargetSelector.xml
+/.idea/gradle.xml
+/.idea/kotlinc.xml
+/.idea/migrations.xml
+/.idea/misc.xml
+/.idea/other.xml
+/.idea/shelf/Uncommitted_changes_before_Update_at_31_7_24,_16_41_[Changes]/shelved.patch
+/.idea/shelf/Uncommitted_changes_before_Update_at_31_7_24__16_41__Changes_.xml
+/.idea/vcs.xml
