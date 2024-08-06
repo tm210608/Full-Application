@@ -33,7 +33,7 @@ android {
         }
         debug {
             isMinifyEnabled = false
-            isTestCoverageEnabled = true
+            enableUnitTestCoverage = true
         }
     }
     compileOptions {
@@ -60,9 +60,11 @@ dependencies {
     //noinspection KaptUsageInsteadOfKsp
 
     //Libs
-    //implementation(":libs:database")
     implementation(project(":login"))
+    implementation(project(":home"))
     implementation(project(":libs:common"))
+    implementation(project(":libs:navigation"))
+    implementation(project(":libs:core"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -72,6 +74,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.compose)
 
     implementation(libs.androidx.runtime)
     implementation(libs.androidx.runtime.livedata)
@@ -86,7 +89,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.material)
     implementation(libs.androidx.fragment.ktx)
-    implementation(project(":login"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.mito.common"
+    namespace = "com.mito.core"
     compileSdk = 34
 
     defaultConfig {
@@ -30,9 +30,19 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
 }
 
 dependencies {
+
+    //Compose
+    implementation(libs.androidx.runtime)
+    implementation(libs.androidx.navigation.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

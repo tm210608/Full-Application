@@ -1,10 +1,12 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
-    namespace = "com.mito.common"
+    namespace = "com.mito.home"
     compileSdk = 34
 
     defaultConfig {
@@ -30,9 +32,29 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
 }
 
 dependencies {
+
+    implementation(project(":libs:common"))
+    implementation(project(":libs:navigation"))
+    implementation(project(":libs:core"))
+
+    //Compose
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.runtime.android)
+
+    //Dagger Hilt
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.material3.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

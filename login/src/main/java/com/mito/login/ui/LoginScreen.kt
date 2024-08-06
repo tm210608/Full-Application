@@ -39,25 +39,39 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.mito.login.R
+import com.mito.common.navigation.NavigationReferences
+import com.mito.core.navigation.Screen
 import kotlinx.coroutines.launch
 
+class LoginScreen : Screen {
+    override val route: String = NavigationReferences.Login.route
+
+    @Composable
+    override fun Content(navController: NavHostController) {
+        val viewModel = hiltViewModel<LoginViewModel>()
+        LoginScreen(navController, viewModel)
+    }
+
+}
+
 @Composable
-fun LoginScreen(viewModel: LoginViewModel){
+fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel){
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)
     ){
-      Login(Modifier.align(Alignment.Center), viewModel)
+      Login(Modifier.align(Alignment.Center), viewModel, navController)
     }
 }
 
 @Composable
-fun Login(modifier: Modifier, viewModel: LoginViewModel) {
+fun Login(modifier: Modifier, viewModel: LoginViewModel, navController: NavHostController) {
 
     val email : String by viewModel.email.observeAsState(initial = "")
     val password : String by viewModel.password.observeAsState(initial = "")
@@ -73,7 +87,7 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel) {
         }
     }else{
         Column(modifier = modifier) {
-            MainImage(Modifier.align(Alignment.CenterHorizontally))
+            MainImage(Modifier.align(Alignment.CenterHorizontally), navController)
             Spacer(modifier = Modifier.padding(16.dp))
             EmailItem(email) { viewModel.onLoginChanged(it, password) }
             Spacer(modifier = Modifier.padding(4.dp))
@@ -171,7 +185,7 @@ fun EmailItem(email: String, onTextFieldChanged: (String) -> Unit) {
 }
 
 @Composable
-fun MainImage(modifier: Modifier) {
+fun MainImage(modifier: Modifier, navController: NavHostController) {
     Image(
         painter = painterResource(id = R.drawable.main_image),
         contentDescription = stringResource(id = R.string.login_text_intro_header_content_description),
@@ -183,11 +197,14 @@ fun MainImage(modifier: Modifier) {
                 CircleShape
             )
             .size(200.dp)
+            .clickable {
+                navController.navigate(NavigationReferences.Home.route)
+            }
     )
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun LoginScreenPreview(){
-    LoginScreen(viewModel = LoginViewModel())
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun LoginScreenPreview(){
+//    LoginScreen(viewModel = LoginViewModel())
+//}
