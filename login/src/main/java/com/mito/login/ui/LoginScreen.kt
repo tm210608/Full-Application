@@ -3,6 +3,7 @@ package com.mito.login.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -39,10 +41,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.mito.login.R
+import com.mito.login.ui.LoginViewModel.*
 import kotlinx.coroutines.launch
 
 @Composable
@@ -59,8 +62,8 @@ fun LoginScreen(viewModel: LoginViewModel){
 @Composable
 fun Login(modifier: Modifier, viewModel: LoginViewModel) {
 
-    val email : String by viewModel.email.observeAsState(initial = "")
-    val password : String by viewModel.password.observeAsState(initial = "")
+    val event = viewModel.event.collectAsState()
+    val status = viewModel.status.collectAsState()
     val loginEnable : Boolean by viewModel.loginEnable.observeAsState(initial = false)
     val isLoading: Boolean by viewModel.isLoading.observeAsState(initial = false)
     val coroutineScope = rememberCoroutineScope()
@@ -75,9 +78,9 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel) {
         Column(modifier = modifier) {
             MainImage(Modifier.align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.padding(16.dp))
-            EmailItem(email) { viewModel.onLoginChanged(it, password) }
+            EmailItem(status.value.username) { viewModel.onLoginChanged(it, status.value.password) }
             Spacer(modifier = Modifier.padding(4.dp))
-            PasswordItem(password) { viewModel.onLoginChanged(email, it) }
+            PasswordItem(status.value.password) { viewModel.onLoginChanged(status.value.username,it) }
             Spacer(modifier = Modifier.padding(8.dp))
             ForgotPassword(Modifier.align(Alignment.End))
             Spacer(modifier = Modifier.padding(16.dp))
@@ -88,7 +91,37 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel) {
             }
         }
     }
+    when (event.value) {
+        is Event.Success -> {
+            ResultDialog(
+                viewModel = viewModel,
+                text = "${(event.value as Event.Success).message} ${status.value.username}"
+            )
+        }
+
+        is Event.Error -> {
+            ResultDialog(
+                viewModel = viewModel,
+                text = (event.value as Event.Error).message
+            )
+        }
+        else -> {}
+    }
 }
+
+@Composable
+fun ResultDialog(viewModel: LoginViewModel, text: String) {
+    Dialog(onDismissRequest = {
+        viewModel.clearEvent()
+    }) {
+        Text(
+            text = text, modifier = Modifier
+                .background(Color.White)
+                .padding(40.dp)
+        )
+    }
+}
+
 
 @Composable
 fun LoginButton(loginEnable: Boolean, onLoginSelected: () -> Unit) {
@@ -186,8 +219,3 @@ fun MainImage(modifier: Modifier) {
     )
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun LoginScreenPreview(){
-    LoginScreen(viewModel = LoginViewModel())
-}
