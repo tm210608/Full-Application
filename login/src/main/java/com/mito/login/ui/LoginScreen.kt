@@ -43,13 +43,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.mito.login.R
 import com.mito.common.navigation.NavigationReferences
+import com.mito.common.navigation.NavigationReferences.Companion.OPTIONAL_DATA_KEY
+import com.mito.common.navigation.NavigationReferences.ProfileReference.getRoute
+import com.mito.common.navigation.NavigationRoute.Home
+import com.mito.common.navigation.model.HomeNavigationData
 import com.mito.core.navigation.Screen
+import com.mito.login.R
 import kotlinx.coroutines.launch
 
 class LoginScreen : Screen {
-    override val route: String = NavigationReferences.Login.route
+    override val route: String = NavigationReferences.LoginReference.getRoute()
 
     @Composable
     override fun Content(navController: NavHostController) {
@@ -60,32 +64,34 @@ class LoginScreen : Screen {
 }
 
 @Composable
-fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel){
+fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)
-    ){
-      Login(Modifier.align(Alignment.Center), viewModel, navController)
+    ) {
+        Login(Modifier.align(Alignment.Center), viewModel, navController)
     }
 }
 
 @Composable
 fun Login(modifier: Modifier, viewModel: LoginViewModel, navController: NavHostController) {
 
-    val email : String by viewModel.email.observeAsState(initial = "")
-    val password : String by viewModel.password.observeAsState(initial = "")
-    val loginEnable : Boolean by viewModel.loginEnable.observeAsState(initial = false)
+    val data : String? = navController.currentBackStackEntry?.arguments?.getString(OPTIONAL_DATA_KEY)
+
+    val email: String by viewModel.email.observeAsState(initial = data ?: "")
+    val password: String by viewModel.password.observeAsState(initial = "")
+    val loginEnable: Boolean by viewModel.loginEnable.observeAsState(initial = false)
     val isLoading: Boolean by viewModel.isLoading.observeAsState(initial = false)
     val coroutineScope = rememberCoroutineScope()
 
-    if(isLoading) {
+    if (isLoading) {
         Box(
             Modifier.fillMaxSize()
         ) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
-    }else{
+    } else {
         Column(modifier = modifier) {
             MainImage(Modifier.align(Alignment.CenterHorizontally), navController)
             Spacer(modifier = Modifier.padding(16.dp))
@@ -107,7 +113,7 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navController: NavHostC
 @Composable
 fun LoginButton(loginEnable: Boolean, onLoginSelected: () -> Unit) {
     Button(
-        onClick = { onLoginSelected()},
+        onClick = { onLoginSelected() },
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp),
@@ -119,7 +125,7 @@ fun LoginButton(loginEnable: Boolean, onLoginSelected: () -> Unit) {
         ),
         enabled = loginEnable,
         shape = RoundedCornerShape(8.dp)
-    ){
+    ) {
         Text(text = stringResource(id = R.string.login_text_field_intro_button))
     }
 }
@@ -131,7 +137,7 @@ fun ForgotPassword(modifier: Modifier) {
         modifier = modifier.clickable { },
         fontSize = 12.sp,
         fontWeight = FontWeight.Bold,
-        color= Color(0xFFE96D34)
+        color = Color(0xFFE96D34)
     )
 }
 
@@ -140,7 +146,7 @@ fun PasswordItem(password: String, onTextFieldChanged: (String) -> Unit) {
 
     TextField(
         value = password,
-        onValueChange = {onTextFieldChanged(it)},
+        onValueChange = { onTextFieldChanged(it) },
         placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_password)) },
         modifier = Modifier.fillMaxWidth(),
         leadingIcon = { Icon(imageVector = Icons.Filled.Lock, contentDescription = null) },
@@ -165,10 +171,10 @@ fun EmailItem(email: String, onTextFieldChanged: (String) -> Unit) {
 
     TextField(
         value = email,
-        onValueChange = {onTextFieldChanged(it)},
+        onValueChange = { onTextFieldChanged(it) },
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text( text = stringResource(id = R.string.login_text_field_intro_email)) },
-        leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = null)},
+        placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_email)) },
+        leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = null) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         singleLine = true,
         maxLines = 1,
@@ -198,7 +204,8 @@ fun MainImage(modifier: Modifier, navController: NavHostController) {
             )
             .size(200.dp)
             .clickable {
-                navController.navigate(NavigationReferences.Home.route)
+                val data = HomeNavigationData(value = "1234")
+                navController.navigate(Home(data).navigateTo())
             }
     )
 }
