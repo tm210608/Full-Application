@@ -30,10 +30,9 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -45,66 +44,59 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.mito.login.R
-import com.mito.login.ui.LoginViewModel.*
-import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel){
+fun LoginScreen(viewModel: LoginViewModel) {
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)
-    ){
-      Login(Modifier.align(Alignment.Center), viewModel)
+    ) {
+        Login(Modifier.align(Alignment.Center), viewModel)
     }
 }
 
 @Composable
 fun Login(modifier: Modifier, viewModel: LoginViewModel) {
 
-    val event = viewModel.event.collectAsState()
-    val status = viewModel.status.collectAsState()
-    val loginEnable : Boolean by viewModel.loginEnable.observeAsState(initial = false)
-    val isLoading: Boolean by viewModel.isLoading.observeAsState(initial = false)
-    val coroutineScope = rememberCoroutineScope()
+    val event by viewModel.event.collectAsState()
+    val status by viewModel.status.collectAsState()
 
-    if(isLoading) {
-        Box(
-            Modifier.fillMaxSize()
-        ) {
-            CircularProgressIndicator(Modifier.align(Alignment.Center))
-        }
-    }else{
-        Column(modifier = modifier) {
-            MainImage(Modifier.align(Alignment.CenterHorizontally))
-            Spacer(modifier = Modifier.padding(16.dp))
-            EmailItem(status.value.username) { viewModel.onLoginChanged(it, status.value.password) }
-            Spacer(modifier = Modifier.padding(4.dp))
-            PasswordItem(status.value.password) { viewModel.onLoginChanged(status.value.username,it) }
-            Spacer(modifier = Modifier.padding(8.dp))
-            ForgotPassword(Modifier.align(Alignment.End))
-            Spacer(modifier = Modifier.padding(16.dp))
-            LoginButton(loginEnable) {
-                coroutineScope.launch {
-                    viewModel.onLoginSelected()
-                }
+    Column(modifier = modifier) {
+        MainImage(Modifier.align(Alignment.CenterHorizontally))
+        Spacer(modifier = Modifier.padding(16.dp))
+        EmailItem(status) { viewModel.onLoginChanged(it, status.password) }
+        Spacer(modifier = Modifier.padding(4.dp))
+        PasswordItem(status) { viewModel.onLoginChanged(status.username, it) }
+        Spacer(modifier = Modifier.padding(8.dp))
+        ForgotPassword(Modifier.align(Alignment.End))
+        Spacer(modifier = Modifier.padding(16.dp))
+        LoginButton(status) { viewModel.login() }
+    }
+    viewModel.isLoading(event)
+    when (event) {
+        is Event.Loading -> {
+            Box(
+                Modifier.fillMaxSize().background(Color.White.copy(alpha = 0.8f))
+            ) {
+                CircularProgressIndicator(Modifier.align(Alignment.Center))
             }
         }
-    }
-    when (event.value) {
+
         is Event.Success -> {
             ResultDialog(
                 viewModel = viewModel,
-                text = "${(event.value as Event.Success).message} ${status.value.username}"
+                text = "${(event as Event.Success).message} ${status.username}"
             )
         }
 
         is Event.Error -> {
             ResultDialog(
                 viewModel = viewModel,
-                text = (event.value as Event.Error).message
+                text = (event as Event.Error).message
             )
         }
+
         else -> {}
     }
 }
@@ -124,9 +116,9 @@ fun ResultDialog(viewModel: LoginViewModel, text: String) {
 
 
 @Composable
-fun LoginButton(loginEnable: Boolean, onLoginSelected: () -> Unit) {
+fun LoginButton(status: Status, onLoginSelected: () -> Unit) {
     Button(
-        onClick = { onLoginSelected()},
+        onClick = { onLoginSelected() },
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp),
@@ -136,9 +128,9 @@ fun LoginButton(loginEnable: Boolean, onLoginSelected: () -> Unit) {
             disabledContainerColor = Color(0xFFD6A28A),
             disabledContentColor = Color.White
         ),
-        enabled = loginEnable,
+        enabled = status.loginEnable && status.isLoading.not(),
         shape = RoundedCornerShape(8.dp)
-    ){
+    ) {
         Text(text = stringResource(id = R.string.login_text_field_intro_button))
     }
 }
@@ -150,16 +142,16 @@ fun ForgotPassword(modifier: Modifier) {
         modifier = modifier.clickable { },
         fontSize = 12.sp,
         fontWeight = FontWeight.Bold,
-        color= Color(0xFFE96D34)
+        color = Color(0xFFE96D34)
     )
 }
 
 @Composable
-fun PasswordItem(password: String, onTextFieldChanged: (String) -> Unit) {
+fun PasswordItem(status: Status, onTextFieldChanged: (String) -> Unit) {
 
     TextField(
-        value = password,
-        onValueChange = {onTextFieldChanged(it)},
+        value = status.password,
+        onValueChange = { onTextFieldChanged(it) },
         placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_password)) },
         modifier = Modifier.fillMaxWidth(),
         leadingIcon = { Icon(imageVector = Icons.Filled.Lock, contentDescription = null) },
@@ -174,20 +166,21 @@ fun PasswordItem(password: String, onTextFieldChanged: (String) -> Unit) {
             unfocusedContainerColor = Color(0xFF9AE485),
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
-        )
+        ),
+        enabled = status.isLoading.not()
     )
 }
 
 @Composable
-fun EmailItem(email: String, onTextFieldChanged: (String) -> Unit) {
+fun EmailItem(status: Status, onTextFieldChanged: (String) -> Unit) {
 
 
     TextField(
-        value = email,
-        onValueChange = {onTextFieldChanged(it)},
+        value = status.username,
+        onValueChange = { onTextFieldChanged(it) },
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text( text = stringResource(id = R.string.login_text_field_intro_email)) },
-        leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = null)},
+        placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_email)) },
+        leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = null) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         singleLine = true,
         maxLines = 1,
@@ -199,7 +192,8 @@ fun EmailItem(email: String, onTextFieldChanged: (String) -> Unit) {
             unfocusedContainerColor = Color(0xFF9AE485),
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
-        )
+        ),
+        enabled = status.isLoading.not()
     )
 }
 
