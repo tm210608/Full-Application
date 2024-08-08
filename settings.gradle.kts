@@ -23,7 +23,10 @@ rootProject.name = "Full Application"
 include(
     ":app",
     ":login",
+    ":home",
     ":libs:database",
     ":libs:network",
-    ":libs:common"
+    ":libs:common",
+    ":libs:navigation"
 )
+include(":libs:core")

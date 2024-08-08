@@ -1,8 +1,11 @@
 [versions]
-#noinspection AndroidGradlePluginVersion
+#noinspection GradleDependency,AndroidGradlePluginVersion
 activityComposeVersion = "1.8.2"
+#noinspection AndroidGradlePluginVersion
 agp = "8.5.0"
 hiltAndroid = "2.51.1"
+#noinspection GradleDependency
+hiltNavigationCompose = "1.2.0"
 #noinspection GradleDependency
 kotlin = "1.9.24"
 coreKtx = "1.13.1"
@@ -12,6 +15,7 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2024.06.00"
+navigationCompose = "2.7.7"
 roomRuntime = "2.6.1"
 retrofit = "2.9.0"
 converterGson = "2.9.0"
@@ -19,9 +23,13 @@ appcompat = "1.7.0"
 material = "1.12.0"
 runtime = "1.6.8"
 legacySupportV4 = "1.0.0"
+#noinspection GradleDependency
 lifecycleLivedataKtx = "2.8.3"
+#noinspection GradleDependency
 lifecycleViewmodelKtx = "2.8.3"
+#noinspection GradleDependency
 fragmentKtx = "1.5.6"
+#noinspection GradleDependency
 activity = "1.9.0"
 constraintlayout = "2.1.4"
 material3 = "1.2.1"
@@ -30,16 +38,22 @@ runtimeAndroid = "1.6.8"
 foundationLayoutAndroid = "1.6.8"
 material3Android = "1.2.1"
 ui = "1.6.8"
+#noinspection GradleDependency
 uiTestJunit4 = "1.5.1"
+#noinspection GradleDependency
 uiTestManifest = "1.5.1"
+#noinspection GradleDependency
 uiTooling = "1.5.1"
 uiToolingPreview = "1.6.8"
 uiToolingPreviewAndroid = "1.6.8"
 
 [libraries]
+#noinspection SimilarGradleDependency
 androidx-activity-compose-v182 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-material = { module = "androidx.compose.material:material", version.ref = "materialVersion" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
