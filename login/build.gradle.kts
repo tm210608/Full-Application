@@ -44,9 +44,12 @@ android {
 dependencies {
     implementation(project(":libs:network"))
     implementation(project(":libs:common"))
+    implementation(project(":libs:navigation"))
+    implementation(project(":libs:core"))
 
     //Compose
     implementation(libs.androidx.runtime)
+    implementation(libs.androidx.navigation.compose)
 
     val composeBom = platform("androidx.compose:compose-bom:2024.06.00")
     implementation(composeBom)
@@ -78,6 +81,7 @@ dependencies {
     //Dagger Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     //Retrofit
     implementation(libs.retrofit)
