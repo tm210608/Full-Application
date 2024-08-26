@@ -32,7 +32,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -46,7 +45,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mito.common.navigation.NavigationReferences
-import com.mito.common.navigation.NavigationReferences.Companion.OPTIONAL_DATA_KEY
 import com.mito.common.navigation.NavigationReferences.ProfileReference.getRoute
 import com.mito.common.navigation.NavigationRoute.Home
 import com.mito.common.navigation.model.HomeNavigationData
@@ -78,13 +76,11 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
 @Composable
 fun Login(modifier: Modifier, viewModel: LoginViewModel, navController: NavHostController) {
 
-    val data : String? = navController.currentBackStackEntry?.arguments?.getString(OPTIONAL_DATA_KEY)
-
     val event by viewModel.event.collectAsState()
     val status by viewModel.status.collectAsState()
 
     Column(modifier = modifier) {
-        MainImage(Modifier.align(Alignment.CenterHorizontally))
+        MainImage(Modifier.align(Alignment.CenterHorizontally), navController)
         Spacer(modifier = Modifier.padding(16.dp))
         EmailItem(status) { viewModel.onLoginChanged(it, status.password) }
         Spacer(modifier = Modifier.padding(4.dp))
