@@ -43,21 +43,42 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.mito.common.navigation.NavigationReferences
+import com.mito.common.navigation.NavigationReferences.Companion.OPTIONAL_DATA_KEY
+import com.mito.common.navigation.NavigationReferences.ProfileReference.getRoute
+import com.mito.common.navigation.NavigationRoute.Home
+import com.mito.common.navigation.model.HomeNavigationData
+import com.mito.core.navigation.Screen
 import com.mito.login.R
 
+class LoginScreen : Screen {
+    override val route: String = NavigationReferences.LoginReference.getRoute()
+
+    @Composable
+    override fun Content(navController: NavHostController) {
+        val viewModel = hiltViewModel<LoginViewModel>()
+        LoginScreen(navController, viewModel)
+    }
+
+}
+
 @Composable
-fun LoginScreen(viewModel: LoginViewModel) {
+fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Login(Modifier.align(Alignment.Center), viewModel)
+        Login(Modifier.align(Alignment.Center), viewModel, navController)
     }
 }
 
 @Composable
-fun Login(modifier: Modifier, viewModel: LoginViewModel) {
+fun Login(modifier: Modifier, viewModel: LoginViewModel, navController: NavHostController) {
+
+    val data : String? = navController.currentBackStackEntry?.arguments?.getString(OPTIONAL_DATA_KEY)
 
     val event by viewModel.event.collectAsState()
     val status by viewModel.status.collectAsState()
@@ -198,7 +219,7 @@ fun EmailItem(status: Status, onTextFieldChanged: (String) -> Unit) {
 }
 
 @Composable
-fun MainImage(modifier: Modifier) {
+fun MainImage(modifier: Modifier, navController: NavHostController) {
     Image(
         painter = painterResource(id = R.drawable.main_image),
         contentDescription = stringResource(id = R.string.login_text_intro_header_content_description),
@@ -210,6 +231,10 @@ fun MainImage(modifier: Modifier) {
                 CircleShape
             )
             .size(200.dp)
+            .clickable {
+                val data = HomeNavigationData(value = "1234")
+                navController.navigate(Home(data).navigateTo())
+            }
     )
 }
 
