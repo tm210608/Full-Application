@@ -52,9 +52,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
 }
-
 
 @Composable
 fun Greeting(modifier: Modifier = Modifier, viewModel: MainViewModel) {
@@ -83,14 +81,12 @@ fun Greeting(modifier: Modifier = Modifier, viewModel: MainViewModel) {
                 text = "${(event.value as Event.Success).message} ${status.value.username}"
             )
         }
-
         is Event.Error -> {
             ResultDialog(
                 viewModel = viewModel,
                 text = (event.value as Event.Error).message
             )
         }
-
         else -> {}
     }
 }
