@@ -24,6 +24,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -35,10 +36,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -50,6 +53,13 @@ import com.mito.common.navigation.NavigationRoute.Home
 import com.mito.common.navigation.model.HomeNavigationData
 import com.mito.core.navigation.Screen
 import com.mito.login.R
+import com.mito.login.data.DummyLoginDataSourceImpl
+import com.mito.login.data.DummyLoginRepositoryImpl
+import com.mito.login.domain.DummyLoginUseCase
+import com.mito.network.dummy_login.data.LoginService
+import com.mito.network.dummy_login.data.request.LoginRequest
+import com.mito.network.dummy_login.data.response.LoginResponse
+import retrofit2.Response
 
 class LoginScreen : Screen {
     override val route: String = NavigationReferences.LoginReference.getRoute()
@@ -59,17 +69,25 @@ class LoginScreen : Screen {
         val viewModel = hiltViewModel<LoginViewModel>()
         LoginScreen(navController, viewModel)
     }
-
 }
 
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
-    Box(
-        Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color(0x5EDBDFA3)
     ) {
-        Login(Modifier.align(Alignment.Center), viewModel, navController)
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(10.dp)
+                .background(
+                    Color.White
+                )
+        ) {
+            Login(Modifier.align(Alignment.Center), viewModel, navController)
+        }
     }
 }
 
@@ -81,20 +99,21 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navController: NavHostC
 
     Column(modifier = modifier) {
         MainImage(Modifier.align(Alignment.CenterHorizontally), navController)
-        Spacer(modifier = Modifier.padding(16.dp))
+        Spacer(modifier = Modifier.padding(20.dp))
         EmailItem(status) { viewModel.onLoginChanged(it, status.password) }
-        Spacer(modifier = Modifier.padding(4.dp))
         PasswordItem(status) { viewModel.onLoginChanged(status.username, it) }
-        Spacer(modifier = Modifier.padding(8.dp))
+        Spacer(modifier = Modifier.padding(6.dp))
         ForgotPassword(Modifier.align(Alignment.End))
-        Spacer(modifier = Modifier.padding(16.dp))
+        Spacer(modifier = Modifier.padding(10.dp))
         LoginButton(status) { viewModel.login() }
     }
     viewModel.isLoading(event)
     when (event) {
         is Event.Loading -> {
             Box(
-                Modifier.fillMaxSize().background(Color.White.copy(alpha = 0.8f))
+                Modifier
+                    .fillMaxSize()
+                    .background(Color.White.copy(alpha = 0.8f))
             ) {
                 CircularProgressIndicator(Modifier.align(Alignment.Center))
             }
@@ -133,12 +152,16 @@ fun ResultDialog(viewModel: LoginViewModel, text: String) {
 
 
 @Composable
-fun LoginButton(status: Status, onLoginSelected: () -> Unit) {
+fun LoginButton(
+    status: Status,
+    onLoginSelected: () -> Unit,
+) {
     Button(
         onClick = { onLoginSelected() },
         modifier = Modifier
             .fillMaxWidth()
-            .height(48.dp),
+            .height(55.dp)
+            .padding(8.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xFFE96D34),
             contentColor = Color.White,
@@ -164,13 +187,17 @@ fun ForgotPassword(modifier: Modifier) {
 }
 
 @Composable
-fun PasswordItem(status: Status, onTextFieldChanged: (String) -> Unit) {
-
+fun PasswordItem(
+    status: Status,
+    onTextFieldChanged: (String) -> Unit,
+) {
     TextField(
         value = status.password,
         onValueChange = { onTextFieldChanged(it) },
         placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_password)) },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         leadingIcon = { Icon(imageVector = Icons.Filled.Lock, contentDescription = null) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         singleLine = true,
@@ -189,13 +216,16 @@ fun PasswordItem(status: Status, onTextFieldChanged: (String) -> Unit) {
 }
 
 @Composable
-fun EmailItem(status: Status, onTextFieldChanged: (String) -> Unit) {
-
-
+fun EmailItem(
+    status: Status,
+    onTextFieldChanged: (String) -> Unit,
+) {
     TextField(
         value = status.username,
         onValueChange = { onTextFieldChanged(it) },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_email)) },
         leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = null) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -234,3 +264,31 @@ fun MainImage(modifier: Modifier, navController: NavHostController) {
     )
 }
 
+@Preview(
+    showBackground = true,
+    showSystemUi = true
+)
+@Composable
+fun LoginScreenPreview() {
+
+    val loginService = FakeLoginService()
+    val repository = DummyLoginRepositoryImpl(DummyLoginDataSourceImpl(loginService))
+    val dummyLoginUseCase = DummyLoginUseCase(repository)
+
+    LoginScreen(
+        navController = NavHostController(LocalContext.current),
+        viewModel = LoginViewModel(dummyLoginUseCase)
+    )
+}
+
+class FakeLoginService : LoginService {
+
+    private val fakeMessage = "fake_token"
+    override suspend fun login(
+        loginRequest: LoginRequest,
+        contentType: String,
+    ): Response<LoginResponse> {
+        // Implementar lógica de login falso para la vista previa
+        return Response.success(LoginResponse(fakeMessage, "ok"))
+    }
+}

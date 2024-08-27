@@ -49,6 +49,7 @@ class LoginViewModel @Inject constructor(
                                 status.value.copy(userId = (result.value?.userId))
                             _event.emit(Event.Success((result.value?.message ?: "")))
                         }
+                        else -> {}
                     }
                 }
         }
