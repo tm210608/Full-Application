@@ -47,6 +47,7 @@ class LoginViewModel @Inject constructor(
                             delay(2000)
                             _event.emit(Event.Success(it.value.toString()))
                         }
+                        else -> {}
                     }
                 }
         }

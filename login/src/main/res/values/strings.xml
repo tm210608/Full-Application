@@ -4,4 +4,8 @@
     <string name="login_text_field_intro_button">Iniciar Sesión</string>
     <string name="login_text_intro_forgot_password">¿Olvidaste la contraseña?</string>
     <string name="login_text_intro_header_content_description">imagen de cabecera</string>
+    <string name="home_screen_image_header_content_description">Imagen de inicio</string>
+    <string name="home_screen_button_text">Iniciar</string>
+    <string name="home_screen_full_application">Full Application</string>
+
 </resources>
