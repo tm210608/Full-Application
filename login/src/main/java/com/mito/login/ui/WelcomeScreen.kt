@@ -111,7 +111,7 @@ fun IntroButtonScreen(modifier: Modifier, navController: NavHostController) {
 @Composable
 fun ImageScreen(modifier: Modifier) {
     Image(
-        painter = painterResource(id = R.drawable.freepik_proyecto_sin_titulo_20240815101640phtl),
+        painter = painterResource(id = R.drawable.full_application_image_header),
         contentDescription = stringResource(id = R.string.home_screen_image_header_content_description),
         contentScale = ContentScale.Crop,
         modifier = modifier
