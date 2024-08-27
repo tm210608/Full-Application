@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -29,22 +30,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.mito.common.navigation.NavigationReferences
+import com.mito.common.navigation.NavigationReferences.ProfileReference.getRoute
+import com.mito.core.navigation.Screen
 import com.mito.login.R
 
-@Composable
-fun HomeScreen() {
-    Card (
-        modifier = Modifier.fillMaxSize(),
-        colors = CardDefaults.cardColors(Color(0x7CC4F0B8)),
-        elevation = CardDefaults.elevatedCardElevation(6.dp),
-        shape = RoundedCornerShape(25.dp),
-    ){
-        InitialScreen(modifier = Modifier)
+class WelcomeScreen : Screen {
+    override val route: String = NavigationReferences.WelcomeReference.getRoute()
+
+    @Composable
+    override fun Content(navController: NavHostController) {
+        val viewModel = hiltViewModel<WelcomeViewModel>()
+        WelcomeScreen(navController, viewModel)
     }
 }
 
 @Composable
-fun InitialScreen(modifier: Modifier) {
+fun WelcomeScreen(navController: NavHostController, viewModel: WelcomeViewModel) {
+    Card(
+        modifier = Modifier.fillMaxSize(),
+        colors = CardDefaults.cardColors(Color(0x7CC4F0B8)),
+        elevation = CardDefaults.elevatedCardElevation(6.dp),
+        shape = RoundedCornerShape(25.dp),
+    ) {
+        InitialScreen(navController= navController, modifier = Modifier)
+    }
+}
+
+@Composable
+fun InitialScreen(navController: NavHostController, modifier: Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -53,9 +69,9 @@ fun InitialScreen(modifier: Modifier) {
     ) {
         HeaderTextHomeScreen()
         Spacer(modifier = Modifier.padding(20.dp))
-        ImageScreen()
+        ImageScreen(modifier = Modifier)
         Spacer(modifier = Modifier.padding(15.dp))
-        IntroButtonScreen()
+        IntroButtonScreen(modifier = Modifier, navController)
     }
 }
 
@@ -72,10 +88,10 @@ fun HeaderTextHomeScreen() {
 }
 
 @Composable
-fun IntroButtonScreen() {
+fun IntroButtonScreen(modifier: Modifier, navController: NavHostController) {
     Button(
-        onClick = {},
-        modifier = Modifier
+        onClick = { navController.navigate(NavigationReferences.LoginReference.getRoute()) },
+        modifier = modifier
             .height(50.dp)
             .padding(8.dp)
             .size(120.dp),
@@ -86,19 +102,19 @@ fun IntroButtonScreen() {
             disabledContentColor = Color.White
         ),
         shape = RoundedCornerShape(8.dp)
-        )
+    )
     {
         Text(text = stringResource(id = R.string.home_screen_button_text))
     }
 }
 
 @Composable
-fun ImageScreen() {
+fun ImageScreen(modifier: Modifier) {
     Image(
         painter = painterResource(id = R.drawable.freepik_proyecto_sin_titulo_20240815101640phtl),
         contentDescription = stringResource(id = R.string.home_screen_image_header_content_description),
         contentScale = ContentScale.Crop,
-        modifier = Modifier
+        modifier = modifier
             .size(300.dp)
             .clip(CircleShape),
         alignment = Alignment.Center,
@@ -108,5 +124,9 @@ fun ImageScreen() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+
+    WelcomeScreen(
+        navController = NavHostController(LocalContext.current),
+        viewModel = WelcomeViewModel()
+    )
 }

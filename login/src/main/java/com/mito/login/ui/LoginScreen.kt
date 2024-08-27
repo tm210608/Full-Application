@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -68,7 +69,6 @@ class LoginScreen : Screen {
         val viewModel = hiltViewModel<LoginViewModel>()
         LoginScreen(navController, viewModel)
     }
-
 }
 
 @Composable
@@ -154,7 +154,7 @@ fun ResultDialog(viewModel: LoginViewModel, text: String) {
 @Composable
 fun LoginButton(
     status: Status,
-    onLoginSelected: () -> Unit
+    onLoginSelected: () -> Unit,
 ) {
     Button(
         onClick = { onLoginSelected() },
@@ -189,7 +189,7 @@ fun ForgotPassword(modifier: Modifier) {
 @Composable
 fun PasswordItem(
     status: Status,
-    onTextFieldChanged: (String) -> Unit
+    onTextFieldChanged: (String) -> Unit,
 ) {
     TextField(
         value = status.password,
@@ -218,7 +218,7 @@ fun PasswordItem(
 @Composable
 fun EmailItem(
     status: Status,
-    onTextFieldChanged: (String) -> Unit
+    onTextFieldChanged: (String) -> Unit,
 ) {
     TextField(
         value = status.username,
@@ -275,7 +275,10 @@ fun LoginScreenPreview() {
     val repository = DummyLoginRepositoryImpl(DummyLoginDataSourceImpl(loginService))
     val dummyLoginUseCase = DummyLoginUseCase(repository)
 
-    LoginScreen(viewModel = LoginViewModel(dummyLoginUseCase))
+    LoginScreen(
+        navController = NavHostController(LocalContext.current),
+        viewModel = LoginViewModel(dummyLoginUseCase)
+    )
 }
 
 class FakeLoginService : LoginService {
