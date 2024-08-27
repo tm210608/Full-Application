@@ -1,5 +1,6 @@
 package com.mito.login.di
 
+import com.mito.database.data.dao.UserDao
 import com.mito.login.data.DummyLoginDataSource
 import com.mito.login.data.DummyLoginDataSourceImpl
 import com.mito.login.data.DummyLoginRepository
@@ -17,8 +18,11 @@ class DummyLoginModule {
 
     @Provides
     @Singleton
-    fun provideDummyLoginDataSource(loginService: LoginService): DummyLoginDataSource {
-        return DummyLoginDataSourceImpl(loginService)
+    fun provideDummyLoginDataSource(
+        loginService: LoginService,
+        userDao: UserDao
+    ): DummyLoginDataSource {
+        return DummyLoginDataSourceImpl(loginService, userDao)
     }
 
     @Provides

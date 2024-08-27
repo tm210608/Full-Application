@@ -46,6 +46,7 @@ dependencies {
     implementation(project(":libs:common"))
     implementation(project(":libs:navigation"))
     implementation(project(":libs:core"))
+    implementation(project(":libs:database"))
 
     //Compose
     implementation(libs.androidx.runtime)

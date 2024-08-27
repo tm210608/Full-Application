@@ -34,18 +34,20 @@ class LoginViewModel @Inject constructor(
                 .onStart {
                     _event.emit(Event.Loading)
                 }
-                .collect {
-                    when (it) {
+                .collect {result ->
+                    when (result) {
                         is Result.Error -> {
                             Log.d("Login MITO", "No funcionó el Login")
                             delay(2000)
-                            _event.emit(Event.Error(it.toString()))
+                            _event.emit(Event.Error(result.message))
                         }
 
-                        is Result.Success<*> -> {
+                        is Result.Success<LoginUIModel> -> {
                             Log.d("Login MITO", "Funcionó el Login")
                             delay(2000)
-                            _event.emit(Event.Success(it.value.toString()))
+                            _status.value =
+                                status.value.copy(userId = (result.value?.userId))
+                            _event.emit(Event.Success((result.value?.message ?: "")))
                         }
                     }
                 }
@@ -85,5 +87,6 @@ data class Status(
     val username: String = EMPTY_STRING,
     val password: String = EMPTY_STRING,
     val loginEnable: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val userId: Int? = null,
 )

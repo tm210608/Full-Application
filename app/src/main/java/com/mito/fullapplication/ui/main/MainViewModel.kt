@@ -3,6 +3,7 @@ package com.mito.fullapplication.ui.main
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mito.common.tools.EMPTY_STRING
 import com.mito.common.usecase.Result
 import com.mito.login.domain.DummyLoginUseCase
 import com.mito.login.domain.Input
@@ -17,7 +18,7 @@ class MainViewModel @Inject constructor(
     private val dummyLoginUseCase: DummyLoginUseCase
 ) : ViewModel() {
 
-    private val _status : MutableStateFlow<Status> = MutableStateFlow(Status(USERNAME, PASSWORD))
+    private val _status : MutableStateFlow<Status> = MutableStateFlow(Status(EMPTY_STRING, EMPTY_STRING))
     val status : StateFlow<Status> = _status
     private val _event : MutableStateFlow<Event> = MutableStateFlow(Event.None)
     val event : StateFlow<Event> = _event
@@ -43,11 +44,6 @@ class MainViewModel @Inject constructor(
 
     fun clearEvent() {
         viewModelScope.launch { _event.emit(Event.None) }
-    }
-
-    companion object{
-        private const val USERNAME = "correct_login@example.com"
-        private const val PASSWORD = "C0rr3Ct_P@55w0rd"
     }
 }
 
