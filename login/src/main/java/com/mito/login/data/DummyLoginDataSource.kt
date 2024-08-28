@@ -17,7 +17,7 @@ class DummyLoginDataSourceImpl @Inject constructor(
     private val userDao: UserDao
 ): DummyLoginDataSource {
     override suspend fun login(username: String, password: String): Result<Pair<LoginResponse, Int>> {
-        val userId = checkCredentialsDataBase(username, password)
+        val userId : Int? = checkCredentialsDataBase(username, password)
         val usernameMock = BuildConfig.USERNAME
         val passwordMock = BuildConfig.PASSWORD
         try {
@@ -27,7 +27,13 @@ class DummyLoginDataSourceImpl @Inject constructor(
             if (response.isSuccessful) {
                 response.body()?.let {
                     return when (it.status) {
-                        SUCCESS -> Result.success(Pair(it, userId!!))
+                        SUCCESS -> {
+                            userId?.let { userId ->
+                                Result.success(Pair(it, userId))
+                            } ?: run {
+                                Result.failure(Exception(it.message))
+                            }
+                        }
                         ERROR -> Result.failure(Exception(it.message))
                         else -> Result.failure(Exception("Unknown status"))
                     }
