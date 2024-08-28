@@ -51,7 +51,11 @@ import com.mito.common.navigation.NavigationReferences
 import com.mito.common.navigation.NavigationReferences.ProfileReference.getRoute
 import com.mito.common.navigation.NavigationRoute.Home
 import com.mito.common.navigation.model.HomeNavigationData
+import com.mito.components.PrimaryButton
 import com.mito.core.navigation.Screen
+import com.mito.database.data.dao.UserDao
+import com.mito.database.data.dao.UserDao_Impl
+import com.mito.database.data.entity.UserEntity
 import com.mito.login.R
 import com.mito.login.data.DummyLoginDataSourceImpl
 import com.mito.login.data.DummyLoginRepositoryImpl
@@ -59,6 +63,7 @@ import com.mito.login.domain.DummyLoginUseCase
 import com.mito.network.dummy_login.data.LoginService
 import com.mito.network.dummy_login.data.request.LoginRequest
 import com.mito.network.dummy_login.data.response.LoginResponse
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 class LoginScreen : Screen {
@@ -150,29 +155,16 @@ fun ResultDialog(viewModel: LoginViewModel, text: String) {
     }
 }
 
-
 @Composable
 fun LoginButton(
     status: Status,
     onLoginSelected: () -> Unit,
 ) {
-    Button(
-        onClick = { onLoginSelected() },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(55.dp)
-            .padding(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFE96D34),
-            contentColor = Color.White,
-            disabledContainerColor = Color(0xFFD6A28A),
-            disabledContentColor = Color.White
-        ),
-        enabled = status.loginEnable && status.isLoading.not(),
-        shape = RoundedCornerShape(8.dp)
-    ) {
-        Text(text = stringResource(id = R.string.login_text_field_intro_button))
-    }
+    PrimaryButton(
+        action = { onLoginSelected() },
+        isEnabled = status.loginEnable && status.isLoading.not(),
+        text = R.string.login_text_field_intro_button
+    )
 }
 
 @Composable
@@ -272,7 +264,7 @@ fun MainImage(modifier: Modifier, navController: NavHostController) {
 fun LoginScreenPreview() {
 
     val loginService = FakeLoginService()
-    val repository = DummyLoginRepositoryImpl(DummyLoginDataSourceImpl(loginService))
+    val repository = DummyLoginRepositoryImpl(DummyLoginDataSourceImpl(loginService, FakeUserDao))
     val dummyLoginUseCase = DummyLoginUseCase(repository)
 
     LoginScreen(
@@ -291,4 +283,16 @@ class FakeLoginService : LoginService {
         // Implementar lógica de login falso para la vista previa
         return Response.success(LoginResponse(fakeMessage, "ok"))
     }
+}
+
+object FakeUserDao : UserDao {
+    override fun getAll(): Flow<List<UserEntity>> { TODO("Not yet implemented") }
+
+    override suspend fun getUserId(email: String, password: String): Int? { TODO("Not yet implemented") }
+
+    override suspend fun insert(user: UserEntity) { TODO("Not yet implemented") }
+
+    override suspend fun update(user: UserEntity) { TODO("Not yet implemented") }
+
+    override suspend fun delete(user: UserEntity) { TODO("Not yet implemented") }
 }
