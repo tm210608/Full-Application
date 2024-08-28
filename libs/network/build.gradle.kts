@@ -12,6 +12,18 @@ android {
     defaultConfig {
         minSdk = 24
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    buildTypes{
+        debug {
+            buildConfigField("String", "USERNAME", "\"correct_login@example.com\"")
+            buildConfigField("String", "PASSWORD", "\"C0rr3Ct_P@55w0rd\"")
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

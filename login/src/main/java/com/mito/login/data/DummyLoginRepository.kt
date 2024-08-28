@@ -6,13 +6,13 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 interface DummyLoginRepository {
-    suspend fun login(username: String, password: String): Result<LoginResponse>
+    suspend fun login(username: String, password: String): Result<Pair<LoginResponse, Int>>
 }
 
 class DummyLoginRepositoryImpl @Inject constructor(
     private val dataSource: DummyLoginDataSource
 ) : DummyLoginRepository {
-    override suspend fun login(username: String, password: String): Result<LoginResponse> {
+    override suspend fun login(username: String, password: String): Result<Pair<LoginResponse, Int>> {
         return withContext(Dispatchers.IO) {
             dataSource.login(username, password)
         }

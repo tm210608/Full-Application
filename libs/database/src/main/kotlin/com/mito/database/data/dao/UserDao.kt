@@ -13,6 +13,9 @@ interface UserDao {
     @Query("SELECT * FROM UserEntity")
     fun getAll(): Flow<List<UserEntity>>
 
+    @Query("SELECT id FROM UserEntity WHERE email = :email AND password = :password")
+    suspend fun getUserId(email: String, password: String): Int?
+
     @Insert
     suspend fun insert(user: UserEntity)
 
