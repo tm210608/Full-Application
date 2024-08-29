@@ -30,3 +30,4 @@ include(
     ":libs:navigation"
 )
 include(":libs:core")
+include(":libs:components")

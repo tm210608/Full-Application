@@ -47,14 +47,11 @@ dependencies {
     implementation(project(":libs:navigation"))
     implementation(project(":libs:core"))
     implementation(project(":libs:database"))
+    implementation(project(":libs:components"))
 
     //Compose
     implementation(libs.androidx.runtime)
     implementation(libs.androidx.navigation.compose)
-
-    val composeBom = platform("androidx.compose:compose-bom:2024.06.00")
-    implementation(composeBom)
-    androidTestImplementation(composeBom)
 
     //Material Design 3
     implementation(libs.material3)
