@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -20,8 +19,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -54,7 +51,6 @@ import com.mito.common.navigation.model.HomeNavigationData
 import com.mito.components.PrimaryButton
 import com.mito.core.navigation.Screen
 import com.mito.database.data.dao.UserDao
-import com.mito.database.data.dao.UserDao_Impl
 import com.mito.database.data.entity.UserEntity
 import com.mito.login.R
 import com.mito.login.data.DummyLoginDataSourceImpl
@@ -127,8 +123,12 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navController: NavHostC
         is Event.Success -> {
             ResultDialog(
                 viewModel = viewModel,
-                text = "${(event as Event.Success).message} ${status.username}"
-            )
+                text = "${(event as Event.Success).message} ${status.username}")
+                {
+                    status.userId?.let {userId ->
+                        navController.navigate(Home(HomeNavigationData(userId)).navigateTo())
+                    }
+                }
         }
 
         is Event.Error -> {
@@ -143,9 +143,10 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navController: NavHostC
 }
 
 @Composable
-fun ResultDialog(viewModel: LoginViewModel, text: String) {
+fun ResultDialog(viewModel: LoginViewModel, text: String, onSuccess: () -> Unit = {}) {
     Dialog(onDismissRequest = {
         viewModel.clearEvent()
+        onSuccess()
     }) {
         Text(
             text = text, modifier = Modifier
@@ -249,10 +250,6 @@ fun MainImage(modifier: Modifier, navController: NavHostController) {
                 CircleShape
             )
             .size(200.dp)
-            .clickable {
-                val data = HomeNavigationData(value = "1234")
-                navController.navigate(Home(data).navigateTo())
-            }
     )
 }
 

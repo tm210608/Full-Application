@@ -3,7 +3,6 @@ package com.mito.common.navigation
 import com.mito.common.navigation.ScreenName.HOME
 import com.mito.common.navigation.ScreenName.LOGIN
 import com.mito.common.navigation.ScreenName.PROFILE
-import com.mito.common.navigation.ScreenName.SETTINGS
 import com.mito.common.navigation.ScreenName.WELCOME
 
 //Sealed Class para obtener la referencia de navegacion
@@ -12,14 +11,12 @@ sealed class NavigationReferences {
     data object LoginReference : NavigationReferences()
     data object HomeReference : NavigationReferences()
     data object ProfileReference : NavigationReferences()
-    data object SettingsReference : NavigationReferences()
 
     fun NavigationReferences.getRoute() = when (this) {
-        is WelcomeReference -> WELCOME.name
-        is LoginReference -> "${LOGIN.name}?$OPTIONAL_DATA_KEY={$OPTIONAL_DATA_KEY}"
-        is HomeReference -> "${HOME.name}/{$MAIN_DATA_KEY}"
-        is ProfileReference -> PROFILE.name
-        is SettingsReference -> SETTINGS.name
+        WelcomeReference -> WELCOME.value
+        is LoginReference -> "${LOGIN.value}?$OPTIONAL_DATA_KEY={$OPTIONAL_DATA_KEY}"
+        is HomeReference -> "${HOME.value}/{$MAIN_DATA_KEY}"
+        ProfileReference -> PROFILE.value
     }
 
     companion object {
