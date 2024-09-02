@@ -1,6 +1,7 @@
 package com.mito.login.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +33,8 @@ import androidx.navigation.NavHostController
 import com.mito.common.navigation.NavigationReferences
 import com.mito.common.navigation.NavigationReferences.ProfileReference.getRoute
 import com.mito.components.PrimaryButton
+import com.mito.components.resources.content_color_disabled
+import com.mito.core.navigation.AppInfo
 import com.mito.core.navigation.Screen
 import com.mito.login.R
 
@@ -70,6 +73,15 @@ fun InitialScreen(navController: NavHostController, modifier: Modifier) {
         ImageScreen(modifier = Modifier)
         Spacer(modifier = Modifier.padding(15.dp))
         IntroButtonScreen(modifier = Modifier, navController)
+    }
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
+    ) {
+        Text(
+            text = AppInfo.APP_VERSION,
+            color = content_color_disabled,modifier = Modifier.padding(10.dp)
+        )
     }
 }
 
