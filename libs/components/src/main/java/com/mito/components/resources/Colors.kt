@@ -20,5 +20,7 @@ val primary_button_color_container_disabled = container_color_disabled
 
 //Text
 val text_color = content_color_second
+@Suppress("unused")
 val text_color_second = content_color
+@Suppress("unused")
 val text_color_disabled = content_color_disabled

@@ -13,6 +13,7 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -67,7 +68,7 @@ fun MitoBottomSheet(buttonSheet: ButtonSheet) {
     with(buttonSheet) {
         ModalBottomSheet(
             onDismissRequest = { onDismissRequest() },
-            sheetState = SheetState(true, initialValue = sheetValue),
+            sheetState = SheetState(true, LocalDensity.current, initialValue = sheetValue),
             modifier = modifier
         ) {
             when(this@with) {
