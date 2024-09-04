@@ -24,7 +24,7 @@ class LoginViewModel @Inject constructor(
     private val dummyLoginUseCase: DummyLoginUseCase,
 ) : ViewModel() {
 
-    private val _status: MutableStateFlow<Status> = MutableStateFlow(Status("email1@mail.com","password1"))
+    private val _status: MutableStateFlow<Status> = MutableStateFlow(Status())
     val status: StateFlow<Status> = _status
 
     private val _event: MutableStateFlow<Event> = MutableStateFlow(Event.None)
