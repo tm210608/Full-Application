@@ -1,7 +1,11 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.mito.login.ui
 
 import android.util.Log
 import android.util.Patterns
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mito.common.tools.EMPTY_STRING
@@ -21,7 +25,7 @@ class LoginViewModel @Inject constructor(
     private val dummyLoginUseCase: DummyLoginUseCase,
 ) : ViewModel() {
 
-    private val _status: MutableStateFlow<Status> = MutableStateFlow(Status())
+    private val _status: MutableStateFlow<Status> = MutableStateFlow(Status("email1@mail.com","password1"))
     val status: StateFlow<Status> = _status
 
     private val _event: MutableStateFlow<Event> = MutableStateFlow(Event.None)
@@ -38,13 +42,11 @@ class LoginViewModel @Inject constructor(
                     when (result) {
                         is Result.Error -> {
                             Log.d("Login MITO", "No funcionó el Login")
-                            delay(2000)
                             _event.emit(Event.Error(result.message))
                         }
 
                         is Result.Success<LoginUIModel> -> {
                             Log.d("Login MITO", "Funcionó el Login")
-                            delay(2000)
                             _status.value =
                                 status.value.copy(userId = (result.value?.userId))
                             _event.emit(Event.Success((result.value?.message ?: "")))
@@ -90,4 +92,5 @@ data class Status(
     val loginEnable: Boolean = false,
     val isLoading: Boolean = false,
     val userId: Int? = null,
+    val sheetValue: SheetValue = SheetValue.Hidden
 )

@@ -7,5 +7,6 @@
     <string name="home_screen_image_header_content_description">Imagen de inicio</string>
     <string name="home_screen_button_text">Iniciar</string>
     <string name="home_screen_full_application">Full Application</string>
+    <string name="welcomw_title_dialog">Welcome</string>
 
 </resources>

@@ -29,5 +29,6 @@ include(
     ":libs:common",
     ":libs:navigation",
     ":libs:core",
-    ":libs:components"
+    ":libs:components",
+    ":menu"
 )
