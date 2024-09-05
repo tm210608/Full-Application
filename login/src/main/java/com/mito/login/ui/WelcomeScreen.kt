@@ -137,6 +137,15 @@ fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) 
                 }
             }
         }
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            Text(
+                text = AppInfo.APP_VERSION,
+                color = content_color_disabled,modifier = Modifier.padding(10.dp)
+            )
+        }
     }
 }
 
@@ -154,15 +163,6 @@ fun InitialScreen(modifier: Modifier) {
             .padding(8.dp))
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Medium_Padding)))
         ImageScreen(modifier = Modifier.align(Alignment.CenterHorizontally))
-    }
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd
-    ) {
-        Text(
-            text = AppInfo.APP_VERSION,
-            color = content_color_disabled,modifier = Modifier.padding(10.dp)
-        )
     }
 }
 
