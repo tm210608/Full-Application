@@ -8,6 +8,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -176,25 +177,12 @@ fun HeaderTextHomeScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun IntroButtonScreen(
-    modifier: Modifier,
-    enabled: Boolean,
-    navController: NavHostController,
-) {
-    Button(
-        onClick = { navController.navigate(NavigationReferences.LoginReference.getRoute()) },
-        modifier = modifier
-            .height(dimensionResource(id = R.dimen.button_Height))
-            .padding(dimensionResource(id = R.dimen.button_Padding))
-            .size(dimensionResource(id = R.dimen.button_Size)),
-        enabled = enabled,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = colorResource(id = R.color.containerButtonColor),
-            contentColor = colorResource(id = R.color.contentAndDisabledColorButton),
-            disabledContainerColor = colorResource(id = R.color.disabledColorButton),
-            disabledContentColor = colorResource(id = R.color.contentAndDisabledColorButton)
-        ),
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_Radius)),
+fun IntroButtonScreen(modifier: Modifier, navController: NavHostController, enabled: Boolean) {
+    PrimaryButton(
+        action = { navController.navigate(NavigationReferences.LoginReference.getRoute()) },
+        text = R.string.home_screen_button_text,
+        modifier = modifier,
+        isEnabled = enabled
     )
 }
 
