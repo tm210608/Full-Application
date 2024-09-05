@@ -23,34 +23,30 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mito.common.navigation.NavigationReferences
 import com.mito.common.navigation.NavigationReferences.ProfileReference.getRoute
 import com.mito.core.navigation.Screen
 import com.mito.login.R
-import kotlinx.coroutines.delay
+import com.mito.login.ui.tools.headerTextHomeScreen
+import com.mito.login.ui.tools.paddingDefault
 
 class WelcomeScreen : Screen {
     override val route: String = NavigationReferences.WelcomeReference.getRoute()
@@ -58,7 +54,6 @@ class WelcomeScreen : Screen {
     @Composable
     override fun Content(navController: NavHostController) {
         val viewModel = hiltViewModel<WelcomeViewModel>()
-
         WelcomeScreen(navController, viewModel)
     }
 }
@@ -66,21 +61,7 @@ class WelcomeScreen : Screen {
 @Composable
 fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) {
 
-    var isAnimated by rememberSaveable { mutableStateOf(false) }
-    var cardActivated by rememberSaveable { mutableStateOf(false) }
-    var buttonActivated by rememberSaveable { mutableStateOf(false) }
-    var buttonEnabled by rememberSaveable { mutableStateOf(false) }
-
-    LaunchedEffect(key1 = Unit) {
-        delay(1500)
-        isAnimated = true
-        delay(2000)
-        cardActivated = true
-        delay(1500)
-        buttonActivated = true
-        delay(500)
-        buttonEnabled = true
-    }
+    val states by viewModel.states.collectAsState()
 
     Column(
         Modifier
@@ -89,7 +70,7 @@ fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) 
     ) {
 
         AnimatedVisibility(
-            visible = isAnimated,
+            visible = states.isAnimated,
             enter = slideInVertically(
                 animationSpec =
                 spring(
@@ -100,17 +81,10 @@ fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) 
             )
         ) {
             Card(
-                modifier = Modifier
-                    .size(800.dp)
-                    .padding(
-                        top = 60.dp,
-                        start = 25.dp,
-                        bottom = 25.dp,
-                        end = 25.dp
-                    ),
-                colors = CardDefaults.cardColors(Color(0x7CC4F0B8)),
-                elevation = CardDefaults.elevatedCardElevation(6.dp),
-                shape = RoundedCornerShape(25.dp),
+                modifier = paddingDefault,
+                colors = CardDefaults.cardColors(colorResource(id = R.color.card_Colors)),
+                elevation = CardDefaults.elevatedCardElevation(dimensionResource(id = R.dimen.card_Elevation)),
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.card_Shape)),
             ) {
                 Column(
                     Modifier
@@ -118,7 +92,7 @@ fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) 
                         .background(Color.Transparent)
                 ) {
                     AnimatedVisibility(
-                        visible = cardActivated,
+                        visible = states.cardActivated,
                         enter = slideInHorizontally(
                             animationSpec =
                             spring(
@@ -129,12 +103,12 @@ fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) 
                         )
                     ) {
                         InitialScreen(
-                            modifier = Modifier,
+                            modifier = Modifier
                         )
                     }
-                    Spacer(modifier = Modifier.padding(25.dp))
+                    Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Medium_Padding)))
                       AnimatedVisibility(
-                          visible = buttonEnabled,
+                          visible = states.buttonActivated,
                           enter = slideInHorizontally(
                               animationSpec =
                               spring(
@@ -153,7 +127,7 @@ fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) 
                         ){
                             IntroButtonScreen(
                                 modifier = Modifier.align(Alignment.CenterVertically),
-                                enabled = buttonEnabled,
+                                enabled = states.buttonEnabled,
                                 navController = navController
                             )
                         }
@@ -173,25 +147,22 @@ fun InitialScreen(modifier: Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.padding(60.dp))
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Large_Padding)))
         HeaderTextHomeScreen(modifier = Modifier
             .align(Alignment.CenterHorizontally)
             .padding(8.dp))
-        Spacer(modifier = Modifier.padding(30.dp))
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Medium_Padding)))
         ImageScreen(modifier = Modifier.align(Alignment.CenterHorizontally))
     }
 }
 
 @Composable
 fun HeaderTextHomeScreen(modifier: Modifier = Modifier) {
+
     Text(
         text = stringResource(id = R.string.home_screen_full_application),
         modifier = modifier,
-        fontFamily = FontFamily.Monospace,
-        style = MaterialTheme.typography.labelMedium,
-        fontSize = 25.sp,
-        letterSpacing = 3.sp,
-        fontWeight = FontWeight.SemiBold
+        style = headerTextHomeScreen.labelMedium
     )
 }
 
@@ -204,17 +175,17 @@ fun IntroButtonScreen(
     Button(
         onClick = { navController.navigate(NavigationReferences.LoginReference.getRoute()) },
         modifier = modifier
-            .height(50.dp)
-            .padding(8.dp)
-            .size(120.dp),
+            .height(dimensionResource(id = R.dimen.button_Height))
+            .padding(dimensionResource(id = R.dimen.button_Padding))
+            .size(dimensionResource(id = R.dimen.button_Size)),
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFE96D34),
-            contentColor = Color.White,
-            disabledContainerColor = Color(0xFFD6A28A),
-            disabledContentColor = Color.White
+            containerColor = colorResource(id = R.color.containerButtonColor),
+            contentColor = colorResource(id = R.color.contentAndDisabledColorButton),
+            disabledContainerColor = colorResource(id = R.color.disabledColorButton),
+            disabledContentColor = colorResource(id = R.color.contentAndDisabledColorButton)
         ),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_Radius)),
     )
     {
         Text(text = stringResource(id = R.string.home_screen_button_text))
@@ -228,7 +199,7 @@ fun ImageScreen(modifier: Modifier) {
         contentDescription = stringResource(id = R.string.home_screen_image_header_content_description),
         contentScale = ContentScale.Crop,
         modifier = modifier
-            .size(250.dp)
+            .size(dimensionResource(id = R.dimen.image_Size))
             .clip(CircleShape),
         alignment = Alignment.Center,
     )

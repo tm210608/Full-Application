@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorAccent">#FFC107</color>
+    <color name="containerButtonColor">#FFE96D34</color>
+    <color name="contentAndDisabledColorButton">#FFFFFFFF</color>
+    <color name="disabledColorButton">#FFD6A28A</color>
+    <color name="card_Colors">#7CC4F0B8</color>
+</resources>
