@@ -14,13 +14,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -43,6 +40,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mito.common.navigation.NavigationReferences
 import com.mito.common.navigation.NavigationReferences.ProfileReference.getRoute
+import com.mito.components.PrimaryButton
+import com.mito.components.resources.content_color_disabled
+import com.mito.core.navigation.AppInfo
 import com.mito.core.navigation.Screen
 import com.mito.login.R
 import com.mito.login.ui.tools.headerTextHomeScreen
@@ -154,6 +154,15 @@ fun InitialScreen(modifier: Modifier) {
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Medium_Padding)))
         ImageScreen(modifier = Modifier.align(Alignment.CenterHorizontally))
     }
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
+    ) {
+        Text(
+            text = AppInfo.APP_VERSION,
+            color = content_color_disabled,modifier = Modifier.padding(10.dp)
+        )
+    }
 }
 
 @Composable
@@ -187,9 +196,6 @@ fun IntroButtonScreen(
         ),
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_Radius)),
     )
-    {
-        Text(text = stringResource(id = R.string.home_screen_button_text))
-    }
 }
 
 @Composable

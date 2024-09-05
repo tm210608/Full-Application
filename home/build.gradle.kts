@@ -34,6 +34,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.14"
@@ -45,10 +46,18 @@ dependencies {
     implementation(project(":libs:common"))
     implementation(project(":libs:navigation"))
     implementation(project(":libs:core"))
+    implementation(project(":libs:components"))
+    implementation(project(":menu"))
 
     //Compose
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.runtime.android)
+    implementation (libs.accompanist.pager)
+    implementation (libs.accompanist.pager.indicators)
+
+    //Android Studio Preview support
+    implementation(libs.ui.tooling.preview)
+    debugImplementation(libs.ui.tooling)
 
     //Dagger Hilt
     implementation(libs.hilt.android)

@@ -27,6 +27,8 @@ include(
     ":libs:database",
     ":libs:network",
     ":libs:common",
-    ":libs:navigation"
+    ":libs:navigation",
+    ":libs:core",
+    ":libs:components",
+    ":menu"
 )
-include(":libs:core")

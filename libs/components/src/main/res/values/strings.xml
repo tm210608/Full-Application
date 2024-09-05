@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="confirm_button">Confirm</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="accept_button">Accept</string>
+    <string name="close_app_title_dialog">Close App</string>
+    <string name="close_app_message_dialog">Are you sure you want to close the app?</string>
+    <string name="continue_button">Continue</string>
+</resources>

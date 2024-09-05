@@ -1,23 +1,20 @@
 package com.mito.common.navigation
 
 import com.mito.common.navigation.model.HomeNavigationData
-import com.mito.common.navigation.model.LoginNavigationData
 
 //Sealed Class para obtener la ruta de navegación desde cada pantalla
 sealed class NavigationRoute {
     data object Welcome : NavigationRoute()
-    data class Login(val data: LoginNavigationData) : NavigationRoute()
+    data object Login : NavigationRoute()
     data class Home(val data: HomeNavigationData) : NavigationRoute()
     data object Profile : NavigationRoute()
-    data object Settings : NavigationRoute()
 
     fun navigateTo() =
         when (this) {
             Welcome -> getNavigationRoute(ScreenName.WELCOME)
             is Home -> getNavigationRoute(ScreenName.HOME, data)
-            is Login -> getNavigationRoute(ScreenName.LOGIN, data)
+            Login -> getNavigationRoute(ScreenName.LOGIN)
             Profile -> getNavigationRoute(ScreenName.PROFILE)
-            Settings -> getNavigationRoute(ScreenName.SETTINGS)
         }
 
     private fun getNavigationRoute(

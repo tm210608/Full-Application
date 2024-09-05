@@ -3,6 +3,7 @@ package com.mito.database.di
 import android.content.Context
 import androidx.room.Room
 import com.mito.database.data.FullApplicationDatabase
+import com.mito.database.data.dao.UserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,6 +27,6 @@ class RoomDatabaseModule {
 
     @Provides
     @Singleton
-    fun provideUserDao(database: FullApplicationDatabase) = database.userDao()
+    fun provideUserDao(database: FullApplicationDatabase) : UserDao = database.userDao()
 
 }
