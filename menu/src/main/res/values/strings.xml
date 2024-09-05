@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_menu_text">Profile</string>
+    <string name="profile_menu_content_description">Profile</string>
+    <string name="exit_menu_text">Exit</string>
+    <string name="exit_menu_content_description">Exit</string>
+    <string name="about_us_menu_text">About Us</string>
+    <string name="about_us_menu_content_description">About Us</string>
+    <string name="notifications_menu_text">Notifications</string>
+    <string name="notifications_menu_content_description">Notifications</string>
+    <string name="feedback_menu_text">Feedback</string>
+    <string name="feedback_menu_content_description">Feedback</string>
+</resources>

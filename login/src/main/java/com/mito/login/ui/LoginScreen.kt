@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.mito.login.ui
 
 
@@ -20,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -48,6 +51,8 @@ import com.mito.common.navigation.NavigationReferences
 import com.mito.common.navigation.NavigationReferences.ProfileReference.getRoute
 import com.mito.common.navigation.NavigationRoute.Home
 import com.mito.common.navigation.model.HomeNavigationData
+import com.mito.components.ButtonSheet
+import com.mito.components.MitoBottomSheet
 import com.mito.components.PrimaryButton
 import com.mito.core.navigation.Screen
 import com.mito.database.data.dao.UserDao
@@ -121,14 +126,18 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navController: NavHostC
         }
 
         is Event.Success -> {
-            ResultDialog(
-                viewModel = viewModel,
-                text = "${(event as Event.Success).message} ${status.username}")
-                {
-                    status.userId?.let {userId ->
+            MitoBottomSheet(
+                getButtonSheet(
+                    text = "${(event as Event.Success).message} ${status.username}",
+                    status = status,
+                    onDismissRequest = { viewModel.clearEvent() }
+                ) {
+                    status.userId?.let { userId ->
                         navController.navigate(Home(HomeNavigationData(userId)).navigateTo())
                     }
+                    viewModel.clearEvent()
                 }
+            )
         }
 
         is Event.Error -> {
@@ -141,6 +150,21 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navController: NavHostC
         else -> {}
     }
 }
+
+fun getButtonSheet(
+    text: String,
+    status: Status,
+    onDismissRequest: () -> Unit,
+    onSuccess: () -> Unit
+): ButtonSheet.ContinueButtonSheet =
+    ButtonSheet.ContinueButtonSheet(
+        title = R.string.welcomw_title_dialog,
+        messageString = text,
+        onAccept = onSuccess,
+        onDismissRequest = onDismissRequest,
+        sheetValue = status.sheetValue
+    )
+
 
 @Composable
 fun ResultDialog(viewModel: LoginViewModel, text: String, onSuccess: () -> Unit = {}) {

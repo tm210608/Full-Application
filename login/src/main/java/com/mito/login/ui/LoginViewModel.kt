@@ -1,7 +1,11 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.mito.login.ui
 
 import android.util.Log
 import android.util.Patterns
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mito.common.tools.EMPTY_STRING
@@ -9,7 +13,6 @@ import com.mito.common.usecase.Result
 import com.mito.login.domain.DummyLoginUseCase
 import com.mito.login.domain.Input
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onStart
@@ -38,13 +41,11 @@ class LoginViewModel @Inject constructor(
                     when (result) {
                         is Result.Error -> {
                             Log.d("Login MITO", "No funcionó el Login")
-                            delay(2000)
                             _event.emit(Event.Error(result.message))
                         }
 
                         is Result.Success<LoginUIModel> -> {
                             Log.d("Login MITO", "Funcionó el Login")
-                            delay(2000)
                             _status.value =
                                 status.value.copy(userId = (result.value?.userId))
                             _event.emit(Event.Success((result.value?.message ?: "")))
@@ -90,4 +91,5 @@ data class Status(
     val loginEnable: Boolean = false,
     val isLoading: Boolean = false,
     val userId: Int? = null,
+    val sheetValue: SheetValue = SheetValue.Hidden
 )

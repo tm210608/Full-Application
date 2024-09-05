@@ -1,4 +1,4 @@
-package com.mito.home.ui.settings
+package com.mito.home.ui.screens.settings
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mito.common.navigation.ScreenName
-import com.mito.home.ui.HomeViewModel
+import com.mito.home.ui.home.HomeViewModel
 import com.mito.home.ui.ScreenByScaffold
 
 class SettingsScreen : ScreenByScaffold {
