@@ -1,9 +1,18 @@
 package com.mito.login.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,22 +21,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mito.common.navigation.NavigationReferences
@@ -37,6 +46,8 @@ import com.mito.components.resources.content_color_disabled
 import com.mito.core.navigation.AppInfo
 import com.mito.core.navigation.Screen
 import com.mito.login.R
+import com.mito.login.ui.tools.headerTextHomeScreen
+import com.mito.login.ui.tools.paddingDefault
 
 class WelcomeScreen : Screen {
     override val route: String = NavigationReferences.WelcomeReference.getRoute()
@@ -49,60 +60,129 @@ class WelcomeScreen : Screen {
 }
 
 @Composable
-fun WelcomeScreen(navController: NavHostController, viewModel: WelcomeViewModel) {
-    Card(
-        modifier = Modifier.fillMaxSize(),
-        colors = CardDefaults.cardColors(Color(0x7CC4F0B8)),
-        elevation = CardDefaults.elevatedCardElevation(6.dp),
-        shape = RoundedCornerShape(25.dp),
-    ) {
-        InitialScreen(navController= navController, modifier = Modifier)
-    }
-}
+fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) {
 
-@Composable
-fun InitialScreen(navController: NavHostController, modifier: Modifier) {
+    val states by viewModel.states.collectAsState()
+
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 140.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        Modifier
+            .fillMaxSize()
+            .background(Color.Transparent)
     ) {
-        HeaderTextHomeScreen()
-        Spacer(modifier = Modifier.padding(20.dp))
-        ImageScreen(modifier = Modifier)
-        Spacer(modifier = Modifier.padding(15.dp))
-        IntroButtonScreen(modifier = Modifier, navController)
-    }
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd
-    ) {
-        Text(
-            text = AppInfo.APP_VERSION,
-            color = content_color_disabled,modifier = Modifier.padding(10.dp)
-        )
+
+        AnimatedVisibility(
+            visible = states.isAnimated,
+            enter = slideInVertically(
+                animationSpec =
+                spring(
+                    stiffness = Spring.StiffnessVeryLow,
+                    dampingRatio = Spring.DampingRatioLowBouncy
+                ),
+                initialOffsetY = { fullHight -> -fullHight }
+            )
+        ) {
+            Card(
+                modifier = paddingDefault,
+                colors = CardDefaults.cardColors(colorResource(id = R.color.card_Colors)),
+                elevation = CardDefaults.elevatedCardElevation(dimensionResource(id = R.dimen.card_Elevation)),
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.card_Shape)),
+            ) {
+                Column(
+                    Modifier
+                        .fillMaxHeight()
+                        .background(Color.Transparent)
+                ) {
+                    AnimatedVisibility(
+                        visible = states.cardActivated,
+                        enter = slideInHorizontally(
+                            animationSpec =
+                            spring(
+                                stiffness = Spring.StiffnessVeryLow,
+                                dampingRatio = Spring.DampingRatioMediumBouncy
+                            ),
+                            initialOffsetX = { fullWidth -> -fullWidth }
+                        )
+                    ) {
+                        InitialScreen(
+                            modifier = Modifier
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Medium_Padding)))
+                      AnimatedVisibility(
+                          visible = states.buttonActivated,
+                          enter = slideInHorizontally(
+                              animationSpec =
+                              spring(
+                                  stiffness = Spring.StiffnessVeryLow,
+                                  dampingRatio = Spring.DampingRatioMediumBouncy
+                              ),
+                              initialOffsetX = { fullWidth -> -fullWidth }
+                          )
+                      ) {
+                        Row (
+                            Modifier
+                                .fillMaxWidth()
+                                .background(Color.Transparent),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ){
+                            IntroButtonScreen(
+                                modifier = Modifier.align(Alignment.CenterVertically),
+                                enabled = states.buttonEnabled,
+                                navController = navController
+                            )
+                        }
+                      }
+
+                }
+            }
+        }
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            Text(
+                text = AppInfo.APP_VERSION,
+                color = content_color_disabled,modifier = Modifier.padding(10.dp)
+            )
+        }
     }
 }
 
 @Composable
-fun HeaderTextHomeScreen() {
+fun InitialScreen(modifier: Modifier) {
+
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Large_Padding)))
+        HeaderTextHomeScreen(modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .padding(8.dp))
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Medium_Padding)))
+        ImageScreen(modifier = Modifier.align(Alignment.CenterHorizontally))
+    }
+}
+
+@Composable
+fun HeaderTextHomeScreen(modifier: Modifier = Modifier) {
+
     Text(
         text = stringResource(id = R.string.home_screen_full_application),
-        fontFamily = FontFamily.Monospace,
-        style = MaterialTheme.typography.labelMedium,
-        fontSize = 25.sp,
-        letterSpacing = 3.sp,
-        fontWeight = FontWeight.SemiBold
+        modifier = modifier,
+        style = headerTextHomeScreen.labelMedium
     )
 }
 
 @Composable
-fun IntroButtonScreen(modifier: Modifier, navController: NavHostController) {
+fun IntroButtonScreen(modifier: Modifier, navController: NavHostController, enabled: Boolean) {
     PrimaryButton(
         action = { navController.navigate(NavigationReferences.LoginReference.getRoute()) },
         text = R.string.home_screen_button_text,
-        modifier = modifier
+        modifier = modifier,
+        isEnabled = enabled
     )
 }
 
@@ -113,7 +193,7 @@ fun ImageScreen(modifier: Modifier) {
         contentDescription = stringResource(id = R.string.home_screen_image_header_content_description),
         contentScale = ContentScale.Crop,
         modifier = modifier
-            .size(300.dp)
+            .size(dimensionResource(id = R.dimen.image_Size))
             .clip(CircleShape),
         alignment = Alignment.Center,
     )
@@ -121,10 +201,7 @@ fun ImageScreen(modifier: Modifier) {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun HomeScreenPreview() {
-
-    WelcomeScreen(
-        navController = NavHostController(LocalContext.current),
-        viewModel = WelcomeViewModel()
-    )
+fun WelcomeScreenScreenPreview() {
+    val navController = NavHostController(LocalContext.current)
+    WelcomeScreen(navController, WelcomeViewModel())
 }

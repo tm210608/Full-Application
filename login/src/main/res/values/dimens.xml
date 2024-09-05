@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="image_Size">250dp</dimen>
+    <dimen name="button_Size">120dp</dimen>
+    <dimen name="button_Padding">8dp</dimen>
+    <dimen name="button_Height">50dp</dimen>
+    <dimen name="padding_Default">16dp</dimen>
+    <dimen name="corner_Radius">8dp</dimen>
+    <dimen name="spacer_Medium_Padding">30dp</dimen>
+    <dimen name="spacer_Large_Padding">60dp</dimen>
+    <dimen name="card_Elevation">6dp</dimen>
+    <dimen name="card_Shape">25dp</dimen>
+</resources>
