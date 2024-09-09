@@ -31,7 +31,7 @@ class DummyLoginDataSourceImpl @Inject constructor(
                             userId?.let { userId ->
                                 Result.success(Pair(it, userId))
                             } ?: run {
-                                Result.failure(Exception(it.message))
+                                Result.success(Pair(LoginResponse("error", "User not found"), 0))
                             }
                         }
                         ERROR -> Result.failure(Exception(it.message))
