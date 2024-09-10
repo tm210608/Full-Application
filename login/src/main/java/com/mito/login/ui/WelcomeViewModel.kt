@@ -18,13 +18,6 @@ class WelcomeViewModel @Inject constructor() : ViewModel() {
     private val _states: MutableStateFlow<States> = MutableStateFlow(States())
     val states: StateFlow<States> = _states
 
-    fun showCloseDialog() {
-        _states.value = _states.value.copy(sheetValue = SheetValue.Expanded)
-    }
-    fun hideCloseDialog() {
-        _states.value = _states.value.copy(sheetValue = SheetValue.Hidden)
-    }
-
     init {
         viewModelScope.launch {
             _states.collect {

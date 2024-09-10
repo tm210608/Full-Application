@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SheetValue.Hidden
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -68,6 +69,7 @@ import com.mito.network.dummy_login.data.request.LoginRequest
 import com.mito.network.dummy_login.data.response.LoginResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
+import kotlin.system.exitProcess
 
 class LoginScreen : Screen {
     override val route: String = NavigationReferences.LoginReference.getRoute()
@@ -75,10 +77,22 @@ class LoginScreen : Screen {
     @Composable
     override fun Content(navController: NavHostController) {
         val viewModel = hiltViewModel<LoginViewModel>()
-
+        val status by viewModel.status.collectAsState()
         //Add BackHandler action here
+
         BackHandler {
-            navController.popBackStack()
+            viewModel.showCloseDialog()
+        }
+        if (status.sheetValue != Hidden){
+            MitoBottomSheet(
+                buttonSheet = ButtonSheet.
+                CloseAppButtonSheet(
+                    onDismissRequest = { viewModel.hideCloseDialog() },
+                    onDismiss = { viewModel.hideCloseDialog() },
+                    onConfirm = { exitProcess(0) },
+                    sheetValue = status.sheetValue
+                )
+            )
         }
         LoginScreen(navController, viewModel)
     }
@@ -160,9 +174,10 @@ fun Login(viewModel: LoginViewModel, navController: NavHostController) {
 
         is Event.Error -> {
             MitoBottomSheet(
-                buttonSheet = ButtonSheet.InfoButtonSheet(
+                buttonSheet =
+                ButtonSheet.InfoButtonSheet(
                     title = R.string.home_screen_full_application,
-                    message = R.string.error_message,
+                    messageString = (event as Event.Error).message,
                     onDismissRequest = { viewModel.clearEvent() },
                     sheetValue = status.sheetValue
                 )

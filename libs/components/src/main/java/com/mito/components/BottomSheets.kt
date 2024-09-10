@@ -45,6 +45,7 @@ sealed class ButtonSheet(
     data class InfoButtonSheet(
         override val title: Int,
         override val message: Int? = null,
+        val messageString: String? = null,
         override val onDismissRequest: () -> Unit,
         override val modifier: Modifier = Modifier,
         override val sheetValue: SheetValue,
@@ -95,7 +96,7 @@ fun MitoBottomSheet(buttonSheet: ButtonSheet) {
                         onAccept = onDismissRequest,
                         onDismissRequest = onDismissRequest,
                         title = stringResource(id = title),
-                        message = message?.let { stringResource(id = it) }
+                        message = message?.let { stringResource(id = it) } ?: run { messageString }
                     )
                 }
             }

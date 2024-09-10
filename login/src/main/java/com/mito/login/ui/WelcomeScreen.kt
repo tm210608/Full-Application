@@ -1,6 +1,5 @@
 package com.mito.login.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -21,8 +20,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SheetValue.Hidden
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -43,8 +40,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mito.common.navigation.NavigationReferences
 import com.mito.common.navigation.NavigationReferences.ProfileReference.getRoute
-import com.mito.components.ButtonSheet
-import com.mito.components.MitoBottomSheet
 import com.mito.components.PrimaryButton
 import com.mito.components.resources.content_color_disabled
 import com.mito.core.navigation.AppInfo
@@ -52,7 +47,6 @@ import com.mito.core.navigation.Screen
 import com.mito.login.R
 import com.mito.login.ui.tools.headerTextHomeScreen
 import com.mito.login.ui.tools.paddingDefault
-import kotlin.system.exitProcess
 
 class WelcomeScreen : Screen {
     override val route: String = NavigationReferences.WelcomeReference.getRoute()
@@ -64,26 +58,10 @@ class WelcomeScreen : Screen {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) {
 
     val states by viewModel.states.collectAsState()
-
-    BackHandler {
-        viewModel.showCloseDialog()
-    }
-    if (states.sheetValue != Hidden){
-        MitoBottomSheet(
-            buttonSheet = ButtonSheet.
-            CloseAppButtonSheet(
-                onDismissRequest = { viewModel.hideCloseDialog() },
-                onDismiss = { viewModel.hideCloseDialog() },
-                onConfirm = { exitProcess(0) },
-                sheetValue = states.sheetValue
-            )
-        )
-    }
 
     Column(
         Modifier
