@@ -24,6 +24,7 @@ import com.mito.core.navigation.ScreenProvider
 import com.mito.fullapplication.ui.main.Event
 import com.mito.fullapplication.ui.main.MainViewModel
 import com.mito.fullapplication.ui.theme.FullApplicationTheme
+import com.mito.login.ui.WelcomeScreen
 import com.mito.navigation.AppNavigation
 import com.mito.navigation.NavigationController
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,7 +47,8 @@ class MainActivity : ComponentActivity() {
                     val screens = screenProvider.getScreens()
                     AppNavigation(
                         navController = navController,
-                        screens = screens
+                        screens = screens,
+                        startScreen = screens.first { it is WelcomeScreen }
                     )
                 }
             }

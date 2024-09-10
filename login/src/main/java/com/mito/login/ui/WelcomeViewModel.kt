@@ -1,5 +1,7 @@
 package com.mito.login.ui
 
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,11 +11,19 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(ExperimentalMaterial3Api::class)
 @HiltViewModel
 class WelcomeViewModel @Inject constructor() : ViewModel() {
 
     private val _states: MutableStateFlow<States> = MutableStateFlow(States())
     val states: StateFlow<States> = _states
+
+    fun showCloseDialog() {
+        _states.value = _states.value.copy(sheetValue = SheetValue.Expanded)
+    }
+    fun hideCloseDialog() {
+        _states.value = _states.value.copy(sheetValue = SheetValue.Hidden)
+    }
 
     init {
         viewModelScope.launch {
@@ -35,6 +45,7 @@ class WelcomeViewModel @Inject constructor() : ViewModel() {
         val isAnimated: Boolean = false,
         val cardActivated: Boolean = false,
         val buttonActivated: Boolean = false,
-        val buttonEnabled: Boolean = false
+        val buttonEnabled: Boolean = false,
+        val sheetValue: SheetValue = SheetValue.Hidden
     )
 }

@@ -63,6 +63,7 @@ sealed class ButtonSheet(
     ) : ButtonSheet(title, message, sheetValue, modifier, button1Text = buttonText, onDismissRequest = onDismissRequest)
 }
 
+@ExperimentalMaterial3Api
 @Composable
 fun MitoBottomSheet(buttonSheet: ButtonSheet) {
     with(buttonSheet) {
@@ -193,5 +194,15 @@ fun BottomSheetTwoButtonsPreview() {
         onDismissRequest = {},
         title = "Close App",
         message = "Are you sure you want to close the app?"
+    )
+}
+@Preview(showBackground = true)
+@Composable
+fun BottomSheetOneButtonsPreview() {
+    BottomSheetContentOneButtons(
+        onAccept = {},
+        onDismissRequest = {},
+        title = "Close App",
+        message = "Error registering user or password"
     )
 }

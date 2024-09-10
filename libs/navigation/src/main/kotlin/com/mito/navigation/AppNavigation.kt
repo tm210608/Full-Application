@@ -10,9 +10,10 @@ import com.mito.core.navigation.Screen
 @Composable
 fun AppNavigation(
     navController: NavHostController,
-    screens: List<Screen>
+    screens: List<Screen>,
+    startScreen: Screen = screens.first(),
 ) {
-    NavHost(navController = navController, startDestination = screens.first().route) {
+    NavHost(navController = navController, startDestination = startScreen.route) {
         screens.forEach { screen ->
             composable(screen.route) { screen.Content(navController) }
         }

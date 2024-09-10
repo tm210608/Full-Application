@@ -10,6 +10,6 @@ val paddingDefault = Modifier
         start = 25.dp,
         top = 60.dp,
         end = 25.dp,
-        bottom = 25.dp
+        bottom = 60.dp
     )
     .size(800.dp)

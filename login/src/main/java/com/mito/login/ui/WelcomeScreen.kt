@@ -1,5 +1,6 @@
 package com.mito.login.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +21,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetValue.Hidden
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -41,6 +43,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mito.common.navigation.NavigationReferences
 import com.mito.common.navigation.NavigationReferences.ProfileReference.getRoute
+import com.mito.components.ButtonSheet
+import com.mito.components.MitoBottomSheet
 import com.mito.components.PrimaryButton
 import com.mito.components.resources.content_color_disabled
 import com.mito.core.navigation.AppInfo
@@ -48,6 +52,7 @@ import com.mito.core.navigation.Screen
 import com.mito.login.R
 import com.mito.login.ui.tools.headerTextHomeScreen
 import com.mito.login.ui.tools.paddingDefault
+import kotlin.system.exitProcess
 
 class WelcomeScreen : Screen {
     override val route: String = NavigationReferences.WelcomeReference.getRoute()
@@ -59,10 +64,26 @@ class WelcomeScreen : Screen {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) {
 
     val states by viewModel.states.collectAsState()
+
+    BackHandler {
+        viewModel.showCloseDialog()
+    }
+    if (states.sheetValue != Hidden){
+        MitoBottomSheet(
+            buttonSheet = ButtonSheet.
+            CloseAppButtonSheet(
+                onDismissRequest = { viewModel.hideCloseDialog() },
+                onDismiss = { viewModel.hideCloseDialog() },
+                onConfirm = { exitProcess(0) },
+                sheetValue = states.sheetValue
+            )
+        )
+    }
 
     Column(
         Modifier
@@ -89,7 +110,7 @@ fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) 
             ) {
                 Column(
                     Modifier
-                        .fillMaxHeight()
+                        .fillMaxSize()
                         .background(Color.Transparent)
                 ) {
                     AnimatedVisibility(
@@ -121,7 +142,7 @@ fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) 
                       ) {
                         Row (
                             Modifier
-                                .fillMaxWidth()
+                                .fillMaxSize()
                                 .background(Color.Transparent),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
@@ -138,8 +159,10 @@ fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) 
             }
         }
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.BottomEnd
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Transparent),
+            contentAlignment = Alignment.BottomEnd,
         ) {
             Text(
                 text = AppInfo.APP_VERSION,
@@ -161,7 +184,7 @@ fun InitialScreen(modifier: Modifier) {
         HeaderTextHomeScreen(modifier = Modifier
             .align(Alignment.CenterHorizontally)
             .padding(8.dp))
-        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Medium_Padding)))
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Large_Padding)))
         ImageScreen(modifier = Modifier.align(Alignment.CenterHorizontally))
     }
 }
@@ -181,7 +204,7 @@ fun IntroButtonScreen(modifier: Modifier, navController: NavHostController, enab
     PrimaryButton(
         action = { navController.navigate(NavigationReferences.LoginReference.getRoute()) },
         text = R.string.home_screen_button_text,
-        modifier = modifier,
+        modifier = modifier.size(height = 55.dp, width = 300.dp),
         isEnabled = enabled
     )
 }
