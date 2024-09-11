@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -89,7 +88,7 @@ fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) 
             ) {
                 Column(
                     Modifier
-                        .fillMaxHeight()
+                        .fillMaxSize()
                         .background(Color.Transparent)
                 ) {
                     AnimatedVisibility(
@@ -121,7 +120,7 @@ fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) 
                       ) {
                         Row (
                             Modifier
-                                .fillMaxWidth()
+                                .fillMaxSize()
                                 .background(Color.Transparent),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
@@ -138,8 +137,10 @@ fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) 
             }
         }
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.BottomEnd
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Transparent),
+            contentAlignment = Alignment.BottomEnd,
         ) {
             Text(
                 text = AppInfo.APP_VERSION,
@@ -161,7 +162,7 @@ fun InitialScreen(modifier: Modifier) {
         HeaderTextHomeScreen(modifier = Modifier
             .align(Alignment.CenterHorizontally)
             .padding(8.dp))
-        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Medium_Padding)))
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Large_Padding)))
         ImageScreen(modifier = Modifier.align(Alignment.CenterHorizontally))
     }
 }
@@ -181,7 +182,7 @@ fun IntroButtonScreen(modifier: Modifier, navController: NavHostController, enab
     PrimaryButton(
         action = { navController.navigate(NavigationReferences.LoginReference.getRoute()) },
         text = R.string.home_screen_button_text,
-        modifier = modifier,
+        modifier = modifier.size(height = 55.dp, width = 300.dp),
         isEnabled = enabled
     )
 }

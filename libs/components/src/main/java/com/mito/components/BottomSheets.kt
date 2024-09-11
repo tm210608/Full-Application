@@ -45,6 +45,7 @@ sealed class ButtonSheet(
     data class InfoButtonSheet(
         override val title: Int,
         override val message: Int? = null,
+        val messageString: String? = null,
         override val onDismissRequest: () -> Unit,
         override val modifier: Modifier = Modifier,
         override val sheetValue: SheetValue,
@@ -63,6 +64,7 @@ sealed class ButtonSheet(
     ) : ButtonSheet(title, message, sheetValue, modifier, button1Text = buttonText, onDismissRequest = onDismissRequest)
 }
 
+@ExperimentalMaterial3Api
 @Composable
 fun MitoBottomSheet(buttonSheet: ButtonSheet) {
     with(buttonSheet) {
@@ -94,7 +96,7 @@ fun MitoBottomSheet(buttonSheet: ButtonSheet) {
                         onAccept = onDismissRequest,
                         onDismissRequest = onDismissRequest,
                         title = stringResource(id = title),
-                        message = message?.let { stringResource(id = it) }
+                        message = message?.let { stringResource(id = it) } ?: run { messageString }
                     )
                 }
             }
@@ -193,5 +195,15 @@ fun BottomSheetTwoButtonsPreview() {
         onDismissRequest = {},
         title = "Close App",
         message = "Are you sure you want to close the app?"
+    )
+}
+@Preview(showBackground = true)
+@Composable
+fun BottomSheetOneButtonsPreview() {
+    BottomSheetContentOneButtons(
+        onAccept = {},
+        onDismissRequest = {},
+        title = "Close App",
+        message = "Error registering user or password"
     )
 }

@@ -76,6 +76,12 @@ class LoginViewModel @Inject constructor(
     fun isLoading(event: Event) {
         _status.value = status.value.copy(isLoading = event is Event.Loading)
     }
+    fun showCloseDialog() {
+        _status.value = _status.value.copy(sheetValue = SheetValue.Expanded)
+    }
+    fun hideCloseDialog() {
+        _status.value = _status.value.copy(sheetValue = SheetValue.Hidden)
+    }
 }
 
 sealed class Event {

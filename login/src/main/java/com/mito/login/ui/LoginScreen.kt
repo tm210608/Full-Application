@@ -3,14 +3,17 @@
 package com.mito.login.ui
 
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,6 +27,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SheetValue.Hidden
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -44,7 +48,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mito.common.navigation.NavigationReferences
@@ -66,6 +69,7 @@ import com.mito.network.dummy_login.data.request.LoginRequest
 import com.mito.network.dummy_login.data.response.LoginResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
+import kotlin.system.exitProcess
 
 class LoginScreen : Screen {
     override val route: String = NavigationReferences.LoginReference.getRoute()
@@ -73,6 +77,23 @@ class LoginScreen : Screen {
     @Composable
     override fun Content(navController: NavHostController) {
         val viewModel = hiltViewModel<LoginViewModel>()
+        val status by viewModel.status.collectAsState()
+        //Add BackHandler action here
+
+        BackHandler {
+            viewModel.showCloseDialog()
+        }
+        if (status.sheetValue != Hidden){
+            MitoBottomSheet(
+                buttonSheet = ButtonSheet.
+                CloseAppButtonSheet(
+                    onDismissRequest = { viewModel.hideCloseDialog() },
+                    onDismiss = { viewModel.hideCloseDialog() },
+                    onConfirm = { exitProcess(0) },
+                    sheetValue = status.sheetValue
+                )
+            )
+        }
         LoginScreen(navController, viewModel)
     }
 }
@@ -92,26 +113,37 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
                     Color.White
                 )
         ) {
-            Login(Modifier.align(Alignment.Center), viewModel, navController)
+            Login(viewModel, navController)
         }
     }
 }
 
 @Composable
-fun Login(modifier: Modifier, viewModel: LoginViewModel, navController: NavHostController) {
+fun Login(viewModel: LoginViewModel, navController: NavHostController) {
 
     val event by viewModel.event.collectAsState()
     val status by viewModel.status.collectAsState()
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(bottom = 20.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.weight(0.5f))
         MainImage(Modifier.align(Alignment.CenterHorizontally), navController)
         Spacer(modifier = Modifier.padding(20.dp))
         EmailItem(status) { viewModel.onLoginChanged(it, status.password) }
         PasswordItem(status) { viewModel.onLoginChanged(status.username, it) }
         Spacer(modifier = Modifier.padding(6.dp))
-        ForgotPassword(Modifier.align(Alignment.End))
-        Spacer(modifier = Modifier.padding(10.dp))
+        ForgotPassword(
+            Modifier
+                .align(Alignment.End)
+                .padding(8.dp))
+        Spacer(modifier = Modifier.weight(1f))
         LoginButton(status) { viewModel.login() }
+        Spacer(modifier = Modifier.weight(0.20f))
     }
     viewModel.isLoading(event)
     when (event) {
@@ -141,12 +173,16 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navController: NavHostC
         }
 
         is Event.Error -> {
-            ResultDialog(
-                viewModel = viewModel,
-                text = (event as Event.Error).message
+            MitoBottomSheet(
+                buttonSheet =
+                ButtonSheet.InfoButtonSheet(
+                    title = R.string.home_screen_full_application,
+                    messageString = (event as Event.Error).message,
+                    onDismissRequest = { viewModel.clearEvent() },
+                    sheetValue = status.sheetValue
+                )
             )
         }
-
         else -> {}
     }
 }
@@ -158,27 +194,12 @@ fun getButtonSheet(
     onSuccess: () -> Unit
 ): ButtonSheet.ContinueButtonSheet =
     ButtonSheet.ContinueButtonSheet(
-        title = R.string.welcomw_title_dialog,
+        title = R.string.welcome_title_dialog,
         messageString = text,
         onAccept = onSuccess,
         onDismissRequest = onDismissRequest,
         sheetValue = status.sheetValue
     )
-
-
-@Composable
-fun ResultDialog(viewModel: LoginViewModel, text: String, onSuccess: () -> Unit = {}) {
-    Dialog(onDismissRequest = {
-        viewModel.clearEvent()
-        onSuccess()
-    }) {
-        Text(
-            text = text, modifier = Modifier
-                .background(Color.White)
-                .padding(40.dp)
-        )
-    }
-}
 
 @Composable
 fun LoginButton(
