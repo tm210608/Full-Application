@@ -306,7 +306,7 @@ fun MainImage(modifier: Modifier, navController: NavHostController) {
 fun LoginScreenPreview() {
 
     val loginService = FakeLoginService()
-    val repository = DummyLoginRepositoryImpl(DummyLoginDataSourceImpl(loginService, FakeUserDao))
+    val repository = DummyLoginRepositoryImpl(DummyLoginDataSourceImpl(loginService), FakeUserDao)
     val dummyLoginUseCase = DummyLoginUseCase(repository)
 
     LoginScreen(

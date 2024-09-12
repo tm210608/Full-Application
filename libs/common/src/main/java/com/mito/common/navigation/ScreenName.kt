@@ -8,5 +8,6 @@ enum class ScreenName(val value: String) {
     SETTINGS("Settings"),
     MAIN("Main"),
     FAVORITES("Favorites"),
-    SEARCH("Search")
+    SEARCH("Search"),
+    NEW_USER("NewUser")
 }

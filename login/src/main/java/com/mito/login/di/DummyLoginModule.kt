@@ -19,15 +19,14 @@ class DummyLoginModule {
     @Provides
     @Singleton
     fun provideDummyLoginDataSource(
-        loginService: LoginService,
-        userDao: UserDao
+        loginService: LoginService
     ): DummyLoginDataSource {
-        return DummyLoginDataSourceImpl(loginService, userDao)
+        return DummyLoginDataSourceImpl(loginService)
     }
 
     @Provides
     @Singleton
-    fun provideDummyLoginRepository(dataSource: DummyLoginDataSource): DummyLoginRepository {
-        return DummyLoginRepositoryImpl(dataSource)
+    fun provideDummyLoginRepository(dataSource: DummyLoginDataSource, userDao: UserDao): DummyLoginRepository {
+        return DummyLoginRepositoryImpl(dataSource, userDao)
     }
 }

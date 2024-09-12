@@ -2,7 +2,6 @@
 
 package com.mito.login.ui
 
-import android.util.Log
 import android.util.Patterns
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
@@ -40,12 +39,10 @@ class LoginViewModel @Inject constructor(
                 .collect {result ->
                     when (result) {
                         is Result.Error -> {
-                            Log.d("Login MITO", "No funcionó el Login")
                             _event.emit(Event.Error(result.message))
                         }
 
                         is Result.Success<LoginUIModel> -> {
-                            Log.d("Login MITO", "Funcionó el Login")
                             _status.value =
                                 status.value.copy(userId = (result.value?.userId))
                             _event.emit(Event.Success((result.value?.message ?: "")))

@@ -1,7 +1,5 @@
 package com.mito.login.data
 
-import com.mito.database.data.dao.UserDao
-import com.mito.network.BuildConfig
 import com.mito.network.dummy_login.data.LoginService
 import com.mito.network.dummy_login.data.request.LoginRequest
 import com.mito.network.dummy_login.data.response.LoginResponse
@@ -9,34 +7,22 @@ import javax.inject.Inject
 
 
 interface DummyLoginDataSource {
-    suspend fun login(username: String, password: String): Result<Pair<LoginResponse, Int>>
+    suspend fun login(username: String, password: String): Result<LoginResponse>
 }
 
 class DummyLoginDataSourceImpl @Inject constructor(
-    private val loginService: LoginService,
-    private val userDao: UserDao
+    private val loginService: LoginService
 ): DummyLoginDataSource {
-    override suspend fun login(username: String, password: String): Result<Pair<LoginResponse, Int>> {
-        val userId : Int? = checkCredentialsDataBase(username, password)
-        val usernameMock = BuildConfig.USERNAME
-        val passwordMock = BuildConfig.PASSWORD
+    override suspend fun login(username: String, password: String): Result<LoginResponse> {
         try {
-            val response =
-                loginService.login(LoginRequest(usernameMock.takeIf { userId != null } ?: username,
-                    passwordMock.takeIf { userId != null } ?: password))
+            val response = loginService.login(LoginRequest(username, password))
             if (response.isSuccessful) {
                 response.body()?.let {
                     return when (it.status) {
-                        SUCCESS -> {
-                            userId?.let { userId ->
-                                Result.success(Pair(it, userId))
-                            } ?: run {
-                                Result.success(Pair(LoginResponse("error", "User not found"), 0))
-                            }
+                            SUCCESS -> Result.success(it)
+                            ERROR -> Result.failure(Exception(it.message))
+                            else -> Result.failure(Exception("Unknown status"))
                         }
-                        ERROR -> Result.failure(Exception(it.message))
-                        else -> Result.failure(Exception("Unknown status"))
-                    }
                 } ?: run {
                     return Result.failure(Exception("Response body is null"))
                 }
@@ -47,11 +33,6 @@ class DummyLoginDataSourceImpl @Inject constructor(
             return Result.failure(e)
         }
     }
-
-    private suspend fun checkCredentialsDataBase(username:String, password: String): Int? {
-        return userDao.getUserId(username, password)
-    }
-
     companion object{
         private const val ERROR = "error"
         private const val SUCCESS = "ok"

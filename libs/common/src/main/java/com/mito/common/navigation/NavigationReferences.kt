@@ -2,6 +2,7 @@ package com.mito.common.navigation
 
 import com.mito.common.navigation.ScreenName.HOME
 import com.mito.common.navigation.ScreenName.LOGIN
+import com.mito.common.navigation.ScreenName.NEW_USER
 import com.mito.common.navigation.ScreenName.PROFILE
 import com.mito.common.navigation.ScreenName.WELCOME
 
@@ -11,12 +12,14 @@ sealed class NavigationReferences {
     data object LoginReference : NavigationReferences()
     data object HomeReference : NavigationReferences()
     data object ProfileReference : NavigationReferences()
+    data object NewUserReference  : NavigationReferences()
 
     fun NavigationReferences.getRoute() = when (this) {
         WelcomeReference -> WELCOME.value
         is LoginReference -> "${LOGIN.value}?$OPTIONAL_DATA_KEY={$OPTIONAL_DATA_KEY}"
         is HomeReference -> "${HOME.value}/{$MAIN_DATA_KEY}"
         ProfileReference -> PROFILE.value
+        NewUserReference -> NEW_USER.value
     }
 
     companion object {
