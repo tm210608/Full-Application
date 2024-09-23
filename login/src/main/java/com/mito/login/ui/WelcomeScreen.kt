@@ -12,10 +12,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -59,11 +63,11 @@ class WelcomeScreen : Screen {
 }
 
 @Composable
-fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) {
+fun WelcomeScreen(navController: NavHostController, viewModel: WelcomeViewModel) {
 
     val states by viewModel.states.collectAsState()
 
-    Column(
+    Box(
         Modifier
             .fillMaxSize()
             .background(Color.Transparent)
@@ -81,7 +85,7 @@ fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) 
             )
         ) {
             Card(
-                modifier = paddingDefault,
+                modifier = paddingDefault.wrapContentSize(),
                 colors = CardDefaults.cardColors(colorResource(id = R.color.card_Colors)),
                 elevation = CardDefaults.elevatedCardElevation(dimensionResource(id = R.dimen.card_Elevation)),
                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.card_Shape)),
@@ -106,47 +110,49 @@ fun WelcomeScreen(navController: NavHostController,viewModel: WelcomeViewModel) 
                             modifier = Modifier
                         )
                     }
-                    Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Medium_Padding)))
-                      AnimatedVisibility(
-                          visible = states.buttonActivated,
-                          enter = slideInHorizontally(
-                              animationSpec =
-                              spring(
-                                  stiffness = Spring.StiffnessVeryLow,
-                                  dampingRatio = Spring.DampingRatioMediumBouncy
-                              ),
-                              initialOffsetX = { fullWidth -> -fullWidth }
-                          )
-                      ) {
-                        Row (
+                    Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Large_Padding)))
+                    AnimatedVisibility(
+                        visible = states.buttonActivated,
+                        enter = slideInHorizontally(
+                            animationSpec =
+                            spring(
+                                stiffness = Spring.StiffnessVeryLow,
+                                dampingRatio = Spring.DampingRatioMediumBouncy
+                            ),
+                            initialOffsetX = { fullWidth -> -fullWidth }
+                        )
+                    ) {
+                        Row(
                             Modifier
                                 .fillMaxSize()
                                 .background(Color.Transparent),
-                            verticalAlignment = Alignment.CenterVertically,
+                            verticalAlignment = Alignment.Bottom,
                             horizontalArrangement = Arrangement.Center
-                        ){
+                        ) {
                             IntroButtonScreen(
                                 modifier = Modifier.align(Alignment.CenterVertically),
                                 enabled = states.buttonEnabled,
                                 navController = navController
                             )
                         }
-                      }
+                    }
 
                 }
             }
         }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Transparent),
-            contentAlignment = Alignment.BottomEnd,
-        ) {
-            Text(
-                text = AppInfo.APP_VERSION,
-                color = content_color_disabled,modifier = Modifier.padding(10.dp)
-            )
-        }
+    }
+    Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Medium_Padding)))
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Transparent)
+            .padding(bottom = WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()),
+        contentAlignment = Alignment.BottomEnd,
+    ) {
+        Text(
+            text = AppInfo.APP_VERSION,
+            color = content_color_disabled, modifier = Modifier.padding(10.dp)
+        )
     }
 }
 
@@ -158,10 +164,12 @@ fun InitialScreen(modifier: Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Large_Padding)))
-        HeaderTextHomeScreen(modifier = Modifier
-            .align(Alignment.CenterHorizontally)
-            .padding(8.dp))
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Medium_Padding)))
+        HeaderTextHomeScreen(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(8.dp)
+        )
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.spacer_Large_Padding)))
         ImageScreen(modifier = Modifier.align(Alignment.CenterHorizontally))
     }

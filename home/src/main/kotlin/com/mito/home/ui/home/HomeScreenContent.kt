@@ -2,8 +2,11 @@ package com.mito.home.ui.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -36,6 +39,7 @@ fun HomeScreenContent(viewModel: HomeViewModel, navController: NavHostController
             viewModel.changeDrawerState(DrawerValue.Closed)
         }) {
         Scaffold(
+            modifier = Modifier.padding(bottom = WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()),
             topBar = { TopBarHome(navController) { viewModel.changeDrawerState(DrawerValue.Open) } },
             bottomBar = {
                 BottomBarHome(status.screenSelected) { selectScreen ->

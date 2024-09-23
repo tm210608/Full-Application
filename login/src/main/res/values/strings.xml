@@ -9,5 +9,6 @@
     <string name="home_screen_full_application">Full Application</string>
     <string name="welcome_title_dialog">Welcome</string>
     <string name="error_message">Error registering user or password</string>
+    <string name="login_text_sign_up">Registrar usuario nuevo</string>
 
 </resources>
