@@ -51,11 +51,11 @@ import com.mito.common.navigation.NavigationReferences
 import com.mito.common.navigation.NavigationReferences.ProfileReference.getRoute
 import com.mito.common.navigation.NavigationRoute.Home
 import com.mito.common.navigation.model.HomeNavigationData
-import com.mito.components.ButtonSheet
+import com.mito.components.MitoButtonSheet
 import com.mito.components.MitoBottomSheet
 import com.mito.components.PrimaryButton
-import com.mito.components.resources.MitoQuestionField
-import com.mito.components.resources.MitoTextField
+import com.mito.components.MitoTextBasic
+import com.mito.components.MitoTextField
 import com.mito.core.navigation.Screen
 import com.mito.database.data.dao.UserDao
 import com.mito.database.data.entity.UserEntity
@@ -85,7 +85,7 @@ class LoginScreen : Screen {
         }
         if (status.sheetValue != Hidden) {
             MitoBottomSheet(
-                buttonSheet = ButtonSheet.CloseAppButtonSheet(
+                mitoButtonSheet = MitoButtonSheet.CloseAppMitoButtonSheet(
                     onDismissRequest = { viewModel.hideCloseDialog() },
                     onDismiss = { viewModel.hideCloseDialog() },
                     onConfirm = { exitProcess(0) },
@@ -183,8 +183,8 @@ fun Login(viewModel: LoginViewModel, navController: NavHostController) {
 
         is Event.Error -> {
             MitoBottomSheet(
-                buttonSheet =
-                ButtonSheet.InfoButtonSheet(
+                mitoButtonSheet =
+                MitoButtonSheet.InfoMitoButtonSheet(
                     title = R.string.home_screen_full_application,
                     messageString = (event as Event.Error).message,
                     onDismissRequest = { viewModel.clearEvent() },
@@ -202,8 +202,8 @@ fun getButtonSheet(
     status: Status,
     onDismissRequest: () -> Unit,
     onSuccess: () -> Unit,
-): ButtonSheet.ContinueButtonSheet =
-    ButtonSheet.ContinueButtonSheet(
+): MitoButtonSheet.ContinueMitoButtonSheet =
+    MitoButtonSheet.ContinueMitoButtonSheet(
         title = R.string.welcome_title_dialog,
         messageString = text,
         onAccept = onSuccess,
@@ -225,7 +225,7 @@ fun LoginButton(
 
 @Composable
 fun SignUp(modifier: Modifier) {
-    MitoQuestionField(
+    MitoTextBasic(
         text = stringResource(id = R.string.login_text_sign_up),
         modifier = modifier
     )
@@ -233,7 +233,7 @@ fun SignUp(modifier: Modifier) {
 
 @Composable
 fun ForgotPassword(modifier: Modifier) {
-    MitoQuestionField(
+    MitoTextBasic(
         text = stringResource(id = R.string.login_text_intro_forgot_password),
         modifier = modifier
     )

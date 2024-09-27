@@ -1,4 +1,4 @@
-package com.mito.components.resources
+package com.mito.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,7 +18,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import com.mito.components.R
+import com.mito.components.resources.container_color_second
+import com.mito.components.resources.primary_button_corner_radius
+import com.mito.components.resources.primary_button_padding
+import com.mito.components.resources.text_size_12
 
 @Composable
 fun MitoTextField(
@@ -67,18 +70,5 @@ fun MitoTextField(
             unfocusedIndicatorColor = Color.Transparent
         ),
         enabled = enabled
-    )
-}
-@Composable
-fun MitoQuestionField(
-    text: String,
-    modifier: Modifier
-){
-    Text(
-        text = text,
-        modifier = modifier,
-        fontSize = text_size_12,
-        fontWeight = FontWeight.Bold,
-        color = container_color_second
     )
 }

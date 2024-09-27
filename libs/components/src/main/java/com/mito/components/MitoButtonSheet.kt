@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.mito.components.resources.text_h2
 import com.mito.components.resources.text_h3
 
-sealed class ButtonSheet(
+sealed class MitoButtonSheet(
     open val title: Int,
     open val message: Int? = null,
     open val sheetValue: SheetValue,
@@ -30,7 +30,7 @@ sealed class ButtonSheet(
     open val button2Text: Int? = null,
     open val onDismissRequest: () -> Unit
 ) {
-    data class CloseAppButtonSheet(
+    data class CloseAppMitoButtonSheet(
         override val title: Int = R.string.close_app_title_dialog,
         override val message: Int = R.string.close_app_message_dialog,
         val onDismiss: () -> Unit,
@@ -40,9 +40,9 @@ sealed class ButtonSheet(
         override val button1Text: Int = R.string.cancel_button,
         override val button2Text: Int = R.string.confirm_button,
         override val onDismissRequest: () -> Unit
-    ) : ButtonSheet(title, message, sheetValue, modifier,button1Text, button2Text, onDismissRequest)
+    ) : MitoButtonSheet(title, message, sheetValue, modifier,button1Text, button2Text, onDismissRequest)
 
-    data class InfoButtonSheet(
+    data class InfoMitoButtonSheet(
         override val title: Int,
         override val message: Int? = null,
         val messageString: String? = null,
@@ -50,9 +50,9 @@ sealed class ButtonSheet(
         override val modifier: Modifier = Modifier,
         override val sheetValue: SheetValue,
         val buttonText: Int = R.string.accept_button
-    ) : ButtonSheet(title, message, sheetValue, modifier, button1Text = buttonText, onDismissRequest = onDismissRequest)
+    ) : MitoButtonSheet(title, message, sheetValue, modifier, button1Text = buttonText, onDismissRequest = onDismissRequest)
 
-    data class ContinueButtonSheet(
+    data class ContinueMitoButtonSheet(
         override val title: Int,
         override val message: Int? = null,
         val messageString: String? = null,
@@ -61,20 +61,20 @@ sealed class ButtonSheet(
         override val modifier: Modifier = Modifier,
         override val onDismissRequest: () -> Unit,
         val buttonText: Int = R.string.continue_button
-    ) : ButtonSheet(title, message, sheetValue, modifier, button1Text = buttonText, onDismissRequest = onDismissRequest)
+    ) : MitoButtonSheet(title, message, sheetValue, modifier, button1Text = buttonText, onDismissRequest = onDismissRequest)
 }
 
 @ExperimentalMaterial3Api
 @Composable
-fun MitoBottomSheet(buttonSheet: ButtonSheet) {
-    with(buttonSheet) {
+fun MitoBottomSheet(mitoButtonSheet: MitoButtonSheet) {
+    with(mitoButtonSheet) {
         ModalBottomSheet(
             onDismissRequest = { onDismissRequest() },
             sheetState = SheetState(true, LocalDensity.current, initialValue = sheetValue),
             modifier = modifier
         ) {
             when(this@with) {
-                is ButtonSheet.CloseAppButtonSheet ->{
+                is MitoButtonSheet.CloseAppMitoButtonSheet ->{
                     BottomSheetContentTwoButtons(
                         onDismiss = { onDismiss() },
                         onConfirm = { onConfirm() },
@@ -83,7 +83,7 @@ fun MitoBottomSheet(buttonSheet: ButtonSheet) {
                         message = stringResource(id = message),
                     )
                 }
-                is ButtonSheet.ContinueButtonSheet -> {
+                is MitoButtonSheet.ContinueMitoButtonSheet -> {
                     BottomSheetContentOneButtons(
                         onAccept = onAccept,
                         onDismissRequest = onDismissRequest,
@@ -91,7 +91,7 @@ fun MitoBottomSheet(buttonSheet: ButtonSheet) {
                         message = message?.let { stringResource(id = it) } ?: run { messageString }
                     )
                 }
-                is ButtonSheet.InfoButtonSheet -> {
+                is MitoButtonSheet.InfoMitoButtonSheet -> {
                     BottomSheetContentOneButtons(
                         onAccept = onDismissRequest,
                         onDismissRequest = onDismissRequest,
