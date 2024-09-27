@@ -1,19 +1,17 @@
 package com.mito.login.data
 
-import com.mito.database.data.dao.UserDao
+import com.mito.login.domain.DummyLoginDataSource
+import com.mito.login.domain.DummyLoginRepository
+import com.mito.login.domain.UserDataSource
 import com.mito.network.BuildConfig
 import com.mito.network.dummy_login.data.response.LoginResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-interface DummyLoginRepository {
-    suspend fun login(username: String, password: String): Pair<Result<LoginResponse>, Int?>
-}
-
 class DummyLoginRepositoryImpl @Inject constructor(
     private val dataSource: DummyLoginDataSource,
-    private val userDao: UserDao
+    private val userDataSource: UserDataSource
 ) : DummyLoginRepository {
     override suspend fun login(
         username: String,
@@ -31,6 +29,6 @@ class DummyLoginRepositoryImpl @Inject constructor(
     }
 
     private suspend fun checkCredentialsDataBase(username: String, password: String): Int? {
-        return userDao.getUserId(username, password) ?: (-1).takeIf { BuildConfig.DEBUG }
+        return userDataSource.checkCredentialsDataBase(username, password)
     }
 }

@@ -1,14 +1,10 @@
 package com.mito.login.data
 
+import com.mito.login.domain.DummyLoginDataSource
 import com.mito.network.dummy_login.data.LoginService
 import com.mito.network.dummy_login.data.request.LoginRequest
 import com.mito.network.dummy_login.data.response.LoginResponse
 import javax.inject.Inject
-
-
-interface DummyLoginDataSource {
-    suspend fun login(username: String, password: String): Result<LoginResponse>
-}
 
 class DummyLoginDataSourceImpl @Inject constructor(
     private val loginService: LoginService
