@@ -1,10 +1,10 @@
 package com.mito.login.di
 
-import com.mito.database.data.dao.UserDao
-import com.mito.login.data.DummyLoginDataSource
 import com.mito.login.data.DummyLoginDataSourceImpl
-import com.mito.login.data.DummyLoginRepository
 import com.mito.login.data.DummyLoginRepositoryImpl
+import com.mito.login.domain.DummyLoginDataSource
+import com.mito.login.domain.DummyLoginRepository
+import com.mito.login.domain.UserDataSource
 import com.mito.network.dummy_login.data.LoginService
 import dagger.Module
 import dagger.Provides
@@ -26,7 +26,7 @@ class DummyLoginModule {
 
     @Provides
     @Singleton
-    fun provideDummyLoginRepository(dataSource: DummyLoginDataSource, userDao: UserDao): DummyLoginRepository {
-        return DummyLoginRepositoryImpl(dataSource, userDao)
+    fun provideDummyLoginRepository(loginDataSource: DummyLoginDataSource, userDataSource: UserDataSource): DummyLoginRepository {
+        return DummyLoginRepositoryImpl(loginDataSource, userDataSource)
     }
 }

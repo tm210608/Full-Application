@@ -1,10 +1,10 @@
 package com.mito.login.di
 
 import com.mito.database.data.dao.UserDao
-import com.mito.login.data.UserDataRepository
 import com.mito.login.data.UserDataRepositoryImpl
-import com.mito.login.data.UserDataSource
 import com.mito.login.data.UserDataSourceImpl
+import com.mito.login.domain.UserDataRepository
+import com.mito.login.domain.UserDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

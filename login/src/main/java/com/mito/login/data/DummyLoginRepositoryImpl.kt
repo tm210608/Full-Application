@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DummyLoginRepositoryImpl @Inject constructor(
-    private val dataSource: DummyLoginDataSource,
+    private val loginDataSource: DummyLoginDataSource,
     private val userDataSource: UserDataSource
 ) : DummyLoginRepository {
     override suspend fun login(
@@ -21,7 +21,7 @@ class DummyLoginRepositoryImpl @Inject constructor(
             val userId: Int? = checkCredentialsDataBase(username, password)
             val usernameMock = BuildConfig.USERNAME
             val passwordMock = BuildConfig.PASSWORD
-            Pair(dataSource.login(
+            Pair(loginDataSource.login(
                 (userId?.takeIf { it != -1 }?.let { usernameMock } ?: username),
                 (userId?.takeIf { it != -1 }?.let { passwordMock} ?: password)
             ), userId)
