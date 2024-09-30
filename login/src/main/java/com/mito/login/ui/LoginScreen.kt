@@ -62,6 +62,7 @@ import com.mito.database.data.entity.UserEntity
 import com.mito.login.R
 import com.mito.login.data.DummyLoginDataSourceImpl
 import com.mito.login.data.DummyLoginRepositoryImpl
+import com.mito.login.data.UserDataSourceImpl
 import com.mito.login.domain.DummyLoginUseCase
 import com.mito.network.dummy_login.data.LoginService
 import com.mito.network.dummy_login.data.request.LoginRequest
@@ -295,7 +296,9 @@ fun MainImage(modifier: Modifier, navController: NavHostController) {
 fun LoginScreenPreview() {
 
     val loginService = FakeLoginService()
-    val repository = DummyLoginRepositoryImpl(DummyLoginDataSourceImpl(loginService, FakeUserDao))
+    val repository = DummyLoginRepositoryImpl(
+        DummyLoginDataSourceImpl(loginService),
+        UserDataSourceImpl(FakeUserDao))
     val dummyLoginUseCase = DummyLoginUseCase(repository)
 
     LoginScreen(
