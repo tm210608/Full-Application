@@ -17,7 +17,7 @@ import androidx.navigation.NavHostController
 import com.mito.common.navigation.NavigationReferences
 import com.mito.common.navigation.NavigationReferences.Companion.MAIN_DATA_KEY
 import com.mito.common.navigation.NavigationReferences.ProfileReference.getRoute
-import com.mito.components.ButtonSheet
+import com.mito.components.MitoButtonSheet
 import com.mito.components.MitoBottomSheet
 import com.mito.components.resources.padding_top_bottom_sheet_dialog_on_scaffold_to_fix
 import com.mito.core.navigation.Screen
@@ -45,7 +45,7 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel) {
         viewModel.showCloseDialog()
     }
     if (status.sheetValue != SheetValue.Hidden) {
-        MitoBottomSheet(buttonSheet = getButtonSheet(viewModel,status,navController))
+        MitoBottomSheet(mitoButtonSheet = getButtonSheet(viewModel,status,navController))
     }
     NavigationDrawer(
         drawerState = status.drawerState,
@@ -60,8 +60,8 @@ fun getButtonSheet(
     viewModel: HomeViewModel,
     status: Status,
     navController: NavHostController
-): ButtonSheet.CloseAppButtonSheet =
-    ButtonSheet.CloseAppButtonSheet(
+): MitoButtonSheet.CloseAppMitoButtonSheet =
+    MitoButtonSheet.CloseAppMitoButtonSheet(
         onDismissRequest = { viewModel.hideCloseDialog() },
         onDismiss = { viewModel.hideCloseDialog() },
         onConfirm = {

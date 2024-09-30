@@ -1,13 +1,14 @@
 <resources>
-    <string name="login_text_field_intro_email">Email: escriba aquí</string>
-    <string name="login_text_field_intro_password">Contraseña: escriba aquí</string>
-    <string name="login_text_field_intro_button">Iniciar sesión</string>
-    <string name="login_text_intro_forgot_password">¿Olvidaste la contraseña?</string>
+    <string name="login_text_field_intro_email">email</string>
+    <string name="login_text_field_intro_password">password</string>
+    <string name="login_text_field_intro_button">Sign in</string>
+    <string name="login_text_intro_forgot_password">¿Forgot password?</string>
     <string name="login_text_intro_header_content_description">imagen de cabecera</string>
     <string name="home_screen_image_header_content_description">Imagen de inicio</string>
-    <string name="home_screen_button_text">Iniciar</string>
+    <string name="home_screen_button_text">Start</string>
     <string name="home_screen_full_application">Full Application</string>
     <string name="welcome_title_dialog">Welcome</string>
     <string name="error_message">Error registering user or password</string>
+    <string name="login_text_sign_up">Register new user</string>
 
 </resources>
