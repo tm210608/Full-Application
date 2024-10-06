@@ -10,5 +10,14 @@
     <string name="welcome_title_dialog">Welcome</string>
     <string name="error_message">Error registering user or password</string>
     <string name="login_text_sign_up">Register new user</string>
+    <string name="register_new_user">Register</string>
+    <string name="header_name_new_user_screen">REGISTRATION</string>
+    <string name="register_new_user_name">name</string>
+    <string name="register_new_user_birth_date">birth date</string>
+    <string name="register_new_user_number_phone">number phone</string>
+    <string name="register_new_user_address">address</string>
+    <string name="register_new_user_city">city</string>
+    <string name="register_new_user_state">state</string>
+    <string name="register_new_user_gender">gender</string>
 
 </resources>

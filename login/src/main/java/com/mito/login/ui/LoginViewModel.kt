@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@ExperimentalMaterial3Api
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val dummyLoginUseCase: DummyLoginUseCase,
@@ -30,6 +31,7 @@ class LoginViewModel @Inject constructor(
     val event: StateFlow<Event> = _event
 
 
+    @OptIn(ExperimentalMaterial3Api::class)
     fun login() {
         viewModelScope.launch {
             dummyLoginUseCase(Input(status.value.username, status.value.password))

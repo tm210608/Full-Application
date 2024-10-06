@@ -6,4 +6,5 @@
     <color name="contentAndDisabledColorButton">#FFFFFFFF</color>
     <color name="disabledColorButton">#FFD6A28A</color>
     <color name="card_Colors">#7CC4F0B8</color>
+    <color name="surface_login_and_register_color">#5EDBDFA3</color>
 </resources>
