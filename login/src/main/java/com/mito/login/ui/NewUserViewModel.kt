@@ -26,4 +26,40 @@ class NewUserViewModel @Inject constructor(
         val state: String = EMPTY_STRING,
         val gender: String = EMPTY_STRING,
     )
+
+    fun onUserNamedChanged(string: String){
+        _status.value = _status.value.copy(username = string)
+    }
+
+    fun onEmailChanged(string: String){
+        _status.value = _status.value.copy(email = string)
+    }
+
+    fun onPasswordChanged(string: String){
+        _status.value = _status.value.copy(password = string)
+    }
+
+    fun onBirthDateChanged(string: String){
+        _status.value = _status.value.copy(birthDate = string)
+    }
+
+    fun onNumberPhoneChanged(string: String){
+        _status.value = _status.value.copy(numberPhone = string)
+    }
+
+    fun onAddressChanged(string: String){
+        _status.value = _status.value.copy(address = string)
+    }
+
+    fun onCityChanged(string: String){
+        _status.value = _status.value.copy(city = string)
+    }
+
+    fun onStateChanged(string: String){
+        _status.value = _status.value.copy(state = string)
+    }
+
+    fun onGenderChanged(string: String){
+        _status.value = _status.value.copy(gender = string)
+    }
 }

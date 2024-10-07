@@ -114,17 +114,28 @@ fun NewUserRegister(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        MitoTextBasic(
-            text = stringResource(id = R.string.register_new_user_name),
-            modifier = Modifier.align(Alignment.Start)
+
+        MitoTextField(
+            value = status.username,
+            onValueChange = { viewModel.onUserNamedChanged(it) },
+            placeholder = { Text(text = stringResource(id = R.string.register_new_user_name)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            enabled = true,
+            titleTextField = R.string.register_new_user_name
         )
-        NameNewUserScreen(status) { }
+
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-        MitoTextBasic(
-            text = stringResource(id = R.string.login_text_field_intro_email),
-            modifier = Modifier.align(Alignment.Start)
+
+        MitoTextField(
+            value = status.email,
+            onValueChange = { viewModel.onEmailChanged(it) },
+            placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_email)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            enabled = true,
+            titleTextField = R.string.login_text_field_intro_email
         )
-        EmailNewUserScreen(status) { }
+
+
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
         MitoTextBasic(
             text = stringResource(id = R.string.login_text_field_intro_password),

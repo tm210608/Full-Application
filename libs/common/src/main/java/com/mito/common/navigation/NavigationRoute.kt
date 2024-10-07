@@ -8,6 +8,7 @@ sealed class NavigationRoute {
     data object Login : NavigationRoute()
     data class Home(val data: HomeNavigationData) : NavigationRoute()
     data object Profile : NavigationRoute()
+    data object NewUser : NavigationRoute()
 
     fun navigateTo() =
         when (this) {
@@ -15,6 +16,7 @@ sealed class NavigationRoute {
             is Home -> getNavigationRoute(ScreenName.HOME, data)
             Login -> getNavigationRoute(ScreenName.LOGIN)
             Profile -> getNavigationRoute(ScreenName.PROFILE)
+            NewUser -> getNavigationRoute(ScreenName.NEW_USER)
         }
 
     private fun getNavigationRoute(

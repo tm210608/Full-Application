@@ -156,7 +156,8 @@ fun Login(viewModel: LoginViewModel, navController: NavHostController) {
         SignUp(modifier = Modifier
             .align(Alignment.End)
             .clickable { }
-            .padding(6.dp)
+            .padding(6.dp),
+            navController = navController
         )
         Spacer(modifier = Modifier.weight(1f))
         LoginButton(status) { viewModel.login() }
@@ -231,10 +232,12 @@ fun LoginButton(
 }
 
 @Composable
-fun SignUp(modifier: Modifier) {
+fun SignUp(modifier: Modifier, navController: NavHostController) {
     MitoTextBasic(
         text = stringResource(id = R.string.login_text_sign_up),
-        modifier = modifier
+        modifier = modifier.clickable {
+            navController.navigate(NavigationReferences.NewUserReference.getRoute())
+        }
     )
 }
 
