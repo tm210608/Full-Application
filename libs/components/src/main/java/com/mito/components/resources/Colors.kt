@@ -11,6 +11,7 @@ val content_color_disabled = Color(0xFFA09F9F)
 val container_color_disabled = Color(0xFFD6A28A)
 val content_color_second = Color(0xFF000000)
 val content_color_disabled_second = Color(0xFFFA8059)
+val error_color = Color( 0xFFD50000)
 
 //Buttons
 val primary_button_color_content = content_color
@@ -24,3 +25,5 @@ val text_color = content_color_second
 val text_color_second = content_color
 @Suppress("unused")
 val text_color_disabled = content_color_disabled
+@Suppress("unused")
+val text_color_error = error_color

@@ -2,7 +2,6 @@ package com.mito.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -19,7 +18,6 @@ import com.mito.components.resources.primary_button_color_content_disabled
 import com.mito.components.resources.primary_button_corner_radius
 import com.mito.components.resources.primary_button_font_size
 import com.mito.components.resources.primary_button_height
-import com.mito.components.resources.primary_button_padding
 
 
 @Composable
@@ -33,8 +31,7 @@ fun PrimaryButton(
         onClick = { action() },
         modifier = modifier
             .fillMaxWidth()
-            .height(primary_button_height)
-            .padding(primary_button_padding),
+            .height(primary_button_height),
         colors = ButtonDefaults.buttonColors(
             containerColor = primary_button_color_container,
             contentColor = primary_button_color_content,
@@ -58,8 +55,7 @@ fun SecondaryButton(
         onClick = { action() },
         modifier = modifier
             .fillMaxWidth()
-            .height(primary_button_height)
-            .padding(primary_button_padding),
+            .height(primary_button_height),
         colors = ButtonDefaults.buttonColors(
             containerColor = content_color_third,
             contentColor = primary_button_color_container,

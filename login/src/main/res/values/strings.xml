@@ -19,5 +19,10 @@
     <string name="register_new_user_city">city</string>
     <string name="register_new_user_state">state</string>
     <string name="register_new_user_gender">gender</string>
+    <string name="login_text_field_intro_confirm_password">confirm password</string>
+    <string name="new_user_text_field_email_error">* The email field is required *</string>
+    <string name="new_user_text_field_password_error">* The password field is required *</string>
+    <string name="confirm_register_new_user">Are you sure to confirm registration?</string>
+    <string name="confirm_action">Confirm action</string>
 
 </resources>

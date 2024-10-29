@@ -1,5 +1,8 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.mito.fullapplication.navigation
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import com.mito.core.navigation.Screen
 import com.mito.core.navigation.ScreenProvider
 import com.mito.home.ui.home.HomeScreen
