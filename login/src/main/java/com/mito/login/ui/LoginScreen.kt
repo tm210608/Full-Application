@@ -40,6 +40,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -51,11 +53,12 @@ import com.mito.common.navigation.NavigationReferences
 import com.mito.common.navigation.NavigationReferences.ProfileReference.getRoute
 import com.mito.common.navigation.NavigationRoute.Home
 import com.mito.common.navigation.model.HomeNavigationData
-import com.mito.components.MitoButtonSheet
 import com.mito.components.MitoBottomSheet
-import com.mito.components.PrimaryButton
+import com.mito.components.MitoButtonSheet
 import com.mito.components.MitoTextBasic
 import com.mito.components.MitoTextField
+import com.mito.components.PrimaryButton
+import com.mito.components.resources.error_color
 import com.mito.core.navigation.Screen
 import com.mito.database.data.dao.UserDao
 import com.mito.database.data.entity.UserEntity
@@ -102,17 +105,21 @@ class LoginScreen : Screen {
 fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
 
     Surface(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(
-                top = WindowInsets.systemBars.asPaddingValues().calculateTopPadding(),
-                bottom = WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
+                top = WindowInsets.systemBars
+                    .asPaddingValues()
+                    .calculateTopPadding(),
+                bottom = WindowInsets.systemBars
+                    .asPaddingValues()
+                    .calculateBottomPadding()
             ),
-        color = Color(0x5EDBDFA3)
     ) {
         Box(
             Modifier
                 .fillMaxSize()
-                .padding(10.dp)
+                .padding(dimensionResource(id = R.dimen.padding_medium))
                 .background(
                     Color.White
                 )
@@ -130,29 +137,39 @@ fun Login(viewModel: LoginViewModel, navController: NavHostController) {
 
     Column(
         modifier = Modifier
-            .fillMaxHeight()
-            .padding(bottom = 10.dp),
+            .fillMaxHeight(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Spacer(modifier = Modifier.weight(0.8f))
+
         MainImage(Modifier.align(Alignment.CenterHorizontally), navController)
+
         Spacer(modifier = Modifier.weight(1f))
+
         EmailItem(status) { viewModel.onLoginChanged(it, status.password) }
+
         PasswordItem(status) { viewModel.onLoginChanged(status.username, it) }
+
         Spacer(modifier = Modifier.weight(0.1f))
+
         ForgotPassword(
             modifier = Modifier
                 .align(Alignment.End)
                 .clickable { }
-                .padding(6.dp)
+                .padding(dimensionResource(id = R.dimen.padding_small))
         )
+
         SignUp(modifier = Modifier
             .align(Alignment.End)
             .clickable { }
-            .padding(6.dp)
+            .padding(dimensionResource(id = R.dimen.padding_small)),
+            navController = navController
         )
+
         Spacer(modifier = Modifier.weight(1f))
+
         LoginButton(status) { viewModel.login() }
     }
     viewModel.isLoading(event)
@@ -198,6 +215,7 @@ fun Login(viewModel: LoginViewModel, navController: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 fun getButtonSheet(
     text: String,
     status: Status,
@@ -225,10 +243,13 @@ fun LoginButton(
 }
 
 @Composable
-fun SignUp(modifier: Modifier) {
+fun SignUp(modifier: Modifier, navController: NavHostController) {
     MitoTextBasic(
         text = stringResource(id = R.string.login_text_sign_up),
-        modifier = modifier
+        modifier = modifier.clickable {
+            navController.navigate(NavigationReferences.NewUserReference.getRoute())
+        },
+        color = error_color
     )
 }
 
@@ -236,7 +257,8 @@ fun SignUp(modifier: Modifier) {
 fun ForgotPassword(modifier: Modifier) {
     MitoTextBasic(
         text = stringResource(id = R.string.login_text_intro_forgot_password),
-        modifier = modifier
+        modifier = modifier,
+        color = error_color
     )
 }
 
@@ -257,7 +279,7 @@ fun PasswordItem(
     )
 }
 
-@Composable
+@Composable 
 fun EmailItem(
     status: Status,
     onTextFieldChanged: (String) -> Unit,
@@ -281,7 +303,10 @@ fun MainImage(modifier: Modifier, navController: NavHostController) {
         modifier = modifier
             .clip(CircleShape)
             .border(
-                BorderStroke(4.dp, Color(0xFFE96D34)),
+                BorderStroke(
+                    dimensionResource(id = R.dimen.padding_extra_small),
+                    colorResource(id = R.color.containerButtonColor)
+                ),
                 CircleShape
             )
             .size(200.dp)
@@ -298,7 +323,8 @@ fun LoginScreenPreview() {
     val loginService = FakeLoginService()
     val repository = DummyLoginRepositoryImpl(
         DummyLoginDataSourceImpl(loginService),
-        UserDataSourceImpl(FakeUserDao))
+        UserDataSourceImpl(FakeUserDao)
+    )
     val dummyLoginUseCase = DummyLoginUseCase(repository)
 
     LoginScreen(

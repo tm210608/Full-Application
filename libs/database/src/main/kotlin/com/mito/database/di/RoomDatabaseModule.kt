@@ -22,7 +22,9 @@ class RoomDatabaseModule {
             context,
             FullApplicationDatabase::class.java,
             "full_application_database"
-            ).build()
+            )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

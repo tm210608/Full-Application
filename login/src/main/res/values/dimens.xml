@@ -10,4 +10,8 @@
     <dimen name="spacer_Large_Padding">60dp</dimen>
     <dimen name="card_Elevation">6dp</dimen>
     <dimen name="card_Shape">25dp</dimen>
+    <dimen name="padding_medium">10dp</dimen>
+    <dimen name="padding_small">6dp</dimen>
+    <dimen name="padding_extra_small">5dp</dimen>
+    <dimen name="header_padding_Height">70dp</dimen>
 </resources>
