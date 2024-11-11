@@ -1,5 +1,7 @@
 package com.mito.login.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,6 +51,7 @@ import com.mito.login.ui.NewUserViewModel.NewUserStatus
 class NewUserScreen : Screen {
     override val route: String = NavigationReferences.NewUserReference.getRoute()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     override fun Content(navController: NavHostController) {
         val viewModel = hiltViewModel<NewUserViewModel>()
@@ -56,6 +59,7 @@ class NewUserScreen : Screen {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterial3Api
 @Composable
 fun NewUserScreen(navController: NavHostController, viewModel: NewUserViewModel) {
@@ -89,6 +93,7 @@ fun NewUserScreen(navController: NavHostController, viewModel: NewUserViewModel)
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterial3Api
 @Composable
 fun NewUserRegister(
@@ -97,6 +102,7 @@ fun NewUserRegister(
 ) {
 
     val status by viewModel.status.collectAsState()
+    val genderOptions by viewModel.genderOptions.collectAsState()
 
     LazyColumn(
         verticalArrangement = Arrangement.Center,
@@ -113,20 +119,22 @@ fun NewUserRegister(
                 onValueChange = { viewModel.onUserNamedChanged(it) },
                 placeholder = { Text(text = stringResource(id = R.string.register_new_user_name)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                showDropdownMenu = false,
                 enabled = true,
-                titleTextField = R.string.register_new_user_name
+                titleTextField = R.string.register_new_user_name,
             )
 
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
 
             MitoTextField(
                 value = status.email,
+                textError = R.string.new_user_text_field_email_error,
                 onValueChange = { viewModel.onEmailChanged(it)},
                 placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_email)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                showDropdownMenu = false,
                 enabled = true,
                 titleTextField = R.string.login_text_field_intro_email,
-                textError = R.string.new_user_text_field_email_error
             )
 
 
@@ -134,14 +142,15 @@ fun NewUserRegister(
 
             MitoTextField(
                 value = status.password,
+                textError = R.string.new_user_text_field_password_error,
                 onValueChange = { viewModel.onPasswordChanged(it) },
                 placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_password)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 showTrailingIcon = true,
                 showPassword = true,
+                showDropdownMenu = false,
                 enabled = true,
                 titleTextField = R.string.login_text_field_intro_password,
-                textError = R.string.new_user_text_field_password_error
             )
 
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
@@ -153,8 +162,9 @@ fun NewUserRegister(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 showTrailingIcon = true,
                 showPassword = true,
+                showDropdownMenu = false,
                 enabled = true,
-                titleTextField = R.string.login_text_field_intro_confirm_password
+                titleTextField = R.string.login_text_field_intro_confirm_password,
             )
 
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
@@ -163,9 +173,13 @@ fun NewUserRegister(
                 value = status.birthDate,
                 onValueChange = { viewModel.onBirthDateChanged(it) },
                 placeholder = { Text(text = stringResource(id = R.string.register_new_user_birth_date)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Unspecified),
+                showTrailingIcon = true,
+                showIsBirthday = true,
+                showDropdownMenu = false,
                 enabled = true,
-                titleTextField = R.string.register_new_user_birth_date
+                readOnly = true,
+                titleTextField = R.string.register_new_user_birth_date,
             )
 
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
@@ -175,8 +189,9 @@ fun NewUserRegister(
                 onValueChange = { viewModel.onNumberPhoneChanged(it) },
                 placeholder = { Text(text = stringResource(id = R.string.register_new_user_number_phone)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                showDropdownMenu = false,
                 enabled = true,
-                titleTextField = R.string.register_new_user_number_phone
+                titleTextField = R.string.register_new_user_number_phone,
             )
 
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
@@ -186,8 +201,9 @@ fun NewUserRegister(
                 onValueChange = { viewModel.onAddressChanged(it) },
                 placeholder = { Text(text = stringResource(id = R.string.register_new_user_address)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii),
+                showDropdownMenu = false,
                 enabled = true,
-                titleTextField = R.string.register_new_user_address
+                titleTextField = R.string.register_new_user_address,
             )
 
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
@@ -197,8 +213,9 @@ fun NewUserRegister(
                 onValueChange = { viewModel.onCityChanged(it) },
                 placeholder = { Text(text = stringResource(id = R.string.register_new_user_city)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                showDropdownMenu = false,
                 enabled = true,
-                titleTextField = R.string.register_new_user_city
+                titleTextField = R.string.register_new_user_city,
             )
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
 
@@ -207,8 +224,9 @@ fun NewUserRegister(
                 onValueChange = { viewModel.onStateChanged(it) },
                 placeholder = { Text(text = stringResource(id = R.string.register_new_user_state)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                showDropdownMenu = false,
                 enabled = true,
-                titleTextField = R.string.register_new_user_state
+                titleTextField = R.string.register_new_user_state,
             )
 
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
@@ -218,8 +236,13 @@ fun NewUserRegister(
                 onValueChange = { viewModel.onGenderChanged(it) },
                 placeholder = { Text(text = stringResource(id = R.string.register_new_user_gender)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                showTrailingIcon = true,
+                showDropdownMenu = true,
                 enabled = true,
-                titleTextField = R.string.register_new_user_gender
+                readOnly = true,
+                titleTextField = R.string.register_new_user_gender,
+                options = genderOptions,
+                onOptionsSelected = { selectedGender -> viewModel.onGenderChanged(selectedGender) },
             )
 
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_Default)))
@@ -281,6 +304,7 @@ fun HeaderTextNewUser(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterial3Api
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

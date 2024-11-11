@@ -3,7 +3,9 @@
 package com.mito.login.ui
 
 
+import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -77,6 +79,7 @@ import kotlin.system.exitProcess
 class LoginScreen : Screen {
     override val route: String = NavigationReferences.LoginReference.getRoute()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content(navController: NavHostController) {
@@ -101,6 +104,7 @@ class LoginScreen : Screen {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
 
@@ -129,6 +133,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Login(viewModel: LoginViewModel, navController: NavHostController) {
 
@@ -179,7 +184,7 @@ fun Login(viewModel: LoginViewModel, navController: NavHostController) {
                 Modifier
                     .fillMaxSize()
                     .background(Color.White.copy(alpha = 0.8f))
-            ) {
+            ) { 
                 CircularProgressIndicator(Modifier.align(Alignment.Center))
             }
         }
@@ -262,6 +267,7 @@ fun ForgotPassword(modifier: Modifier) {
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PasswordItem(
     status: Status,
@@ -279,7 +285,8 @@ fun PasswordItem(
     )
 }
 
-@Composable 
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
 fun EmailItem(
     status: Status,
     onTextFieldChanged: (String) -> Unit,
@@ -290,7 +297,7 @@ fun EmailItem(
         placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_email)) },
         leadingIcon = { Icon(imageVector = Icons.Filled.Email, contentDescription = null) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        enabled = status.isLoading.not()
+        enabled = status.isLoading.not(),
     )
 }
 
@@ -313,6 +320,7 @@ fun MainImage(modifier: Modifier, navController: NavHostController) {
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(
     showBackground = true,
     showSystemUi = true

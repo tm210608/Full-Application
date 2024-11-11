@@ -6,4 +6,9 @@
     <string name="close_app_title_dialog">Close App</string>
     <string name="close_app_message_dialog">Are you sure you want to close the app?</string>
     <string name="continue_button">Continue</string>
+    <string name="options">OPTIONS</string>
+    <string name="birthDate">birth date</string>
+    <string name="select_date">Select day</string>
+    <string name="information">Information</string>
+    <string name="age_error_message">Only people over 18 years old can register</string>
 </resources>

@@ -24,5 +24,5 @@
     <string name="new_user_text_field_password_error">* The password field is required *</string>
     <string name="confirm_register_new_user">Are you sure to confirm registration?</string>
     <string name="confirm_action">Confirm action</string>
-
+    <string name="gender">Gender</string>
 </resources>

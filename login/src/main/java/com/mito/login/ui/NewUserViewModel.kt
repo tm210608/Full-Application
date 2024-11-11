@@ -22,6 +22,9 @@ class NewUserViewModel @Inject constructor(
     private val _status: MutableStateFlow<NewUserStatus> = MutableStateFlow(NewUserStatus())
     val status: StateFlow<NewUserStatus> = _status
 
+    private val _genderOptions: MutableStateFlow<List<String>> = MutableStateFlow(listOf("Male", "Female", "Other"))
+    val genderOptions: StateFlow<List<String>> = _genderOptions
+
     data class NewUserStatus(
         val username: String = EMPTY_STRING,
         val email: String = EMPTY_STRING,
@@ -74,7 +77,7 @@ class NewUserViewModel @Inject constructor(
     }
 
     fun onGenderChanged(string: String) {
-        _status.value = _status.value.copy(gender = string)
+        _status.update { currentStatus -> currentStatus.copy(gender = string) }
     }
 
     private fun isValidEmail(email: String): Boolean =
