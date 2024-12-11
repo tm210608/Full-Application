@@ -11,4 +11,15 @@
     <string name="select_date">Select day</string>
     <string name="information">Information</string>
     <string name="age_error_message">Only people over 18 years old can register</string>
+    <string name="select_option">Select option</string>
+    <string name="register_new_user_name">name</string>
+    <string name="register_new_user_birth_date">birth date</string>
+    <string name="register_new_user_number_phone">number phone</string>
+    <string name="register_new_user_address">address</string>
+    <string name="register_new_user_city">city</string>
+    <string name="register_new_user_state">state</string>
+    <string name="register_new_user_gender">gender</string>
+    <string name="register_new_user_placeholder">Write here</string>
+    <string name="register_new_user_placeholder_options">Choose and option</string>
+    <string name="register_new_user_placeholder_birthdate">Choose a date</string>
 </resources>
