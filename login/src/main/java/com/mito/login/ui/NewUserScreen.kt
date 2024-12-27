@@ -1,9 +1,11 @@
 package com.mito.login.ui
 
+import android.icu.util.Calendar
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -13,8 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
@@ -40,6 +43,7 @@ import com.mito.components.MitoButtonSheet
 import com.mito.components.MitoTextField
 import com.mito.components.PrimaryButton
 import com.mito.components.resources.content_color
+import com.mito.components.resources.extra_small_padding
 import com.mito.components.resources.text_h2
 import com.mito.core.navigation.Screen
 import com.mito.login.R
@@ -49,6 +53,7 @@ import com.mito.login.ui.NewUserViewModel.NewUserStatus
 class NewUserScreen : Screen {
     override val route: String = NavigationReferences.NewUserReference.getRoute()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     override fun Content(navController: NavHostController) {
         val viewModel = hiltViewModel<NewUserViewModel>()
@@ -56,6 +61,7 @@ class NewUserScreen : Screen {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterial3Api
 @Composable
 fun NewUserScreen(navController: NavHostController, viewModel: NewUserViewModel) {
@@ -70,11 +76,13 @@ fun NewUserScreen(navController: NavHostController, viewModel: NewUserViewModel)
                 bottom = WindowInsets.systemBars
                     .asPaddingValues()
                     .calculateBottomPadding()
-            )
+            ),
+        color = Color.Transparent
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(Color.White)
                 .padding(dimensionResource(id = R.dimen.padding_small)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -84,164 +92,179 @@ fun NewUserScreen(navController: NavHostController, viewModel: NewUserViewModel)
                 text = stringResource(id = R.string.header_name_new_user_screen)
             )
             Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-            NewUserRegister(viewModel, navController)
+            NewUserRegister(navController, viewModel)
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterial3Api
 @Composable
 fun NewUserRegister(
-    viewModel: NewUserViewModel,
     navController: NavHostController,
+    viewModel: NewUserViewModel,
 ) {
-
     val status by viewModel.status.collectAsState()
 
-    LazyColumn(
+    Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
-        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium))
+            .background(Color.White)
+            .verticalScroll(rememberScrollState())
+            .padding(dimensionResource(R.dimen.padding_medium))
     ) {
-        item {
 
-            MitoTextField(
-                value = status.username,
-                onValueChange = { viewModel.onUserNamedChanged(it) },
-                placeholder = { Text(text = stringResource(id = R.string.register_new_user_name)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                enabled = true,
-                titleTextField = R.string.register_new_user_name
-            )
+        Spacer(modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)))
 
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
+        RegisterFields(viewModel)
 
-            MitoTextField(
-                value = status.email,
-                onValueChange = { viewModel.onEmailChanged(it)},
-                placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_email)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                enabled = true,
-                titleTextField = R.string.login_text_field_intro_email,
-                textError = R.string.new_user_text_field_email_error
-            )
+        Spacer(modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)))
 
+        ButtonNewUserScreen(status, viewModel) {
 
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-
-            MitoTextField(
-                value = status.password,
-                onValueChange = { viewModel.onPasswordChanged(it) },
-                placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_password)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                showTrailingIcon = true,
-                showPassword = true,
-                enabled = true,
-                titleTextField = R.string.login_text_field_intro_password,
-                textError = R.string.new_user_text_field_password_error
-            )
-
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-
-            MitoTextField(
-                value = status.confirmPassword,
-                onValueChange = { viewModel.onConfirmPasswordChanged(it) },
-                placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_confirm_password)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                showTrailingIcon = true,
-                showPassword = true,
-                enabled = true,
-                titleTextField = R.string.login_text_field_intro_confirm_password
-            )
-
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-
-            MitoTextField(
-                value = status.birthDate,
-                onValueChange = { viewModel.onBirthDateChanged(it) },
-                placeholder = { Text(text = stringResource(id = R.string.register_new_user_birth_date)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii),
-                enabled = true,
-                titleTextField = R.string.register_new_user_birth_date
-            )
-
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-
-            MitoTextField(
-                value = status.numberPhone,
-                onValueChange = { viewModel.onNumberPhoneChanged(it) },
-                placeholder = { Text(text = stringResource(id = R.string.register_new_user_number_phone)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                enabled = true,
-                titleTextField = R.string.register_new_user_number_phone
-            )
-
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-
-            MitoTextField(
-                value = status.address,
-                onValueChange = { viewModel.onAddressChanged(it) },
-                placeholder = { Text(text = stringResource(id = R.string.register_new_user_address)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii),
-                enabled = true,
-                titleTextField = R.string.register_new_user_address
-            )
-
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-
-            MitoTextField(
-                value = status.city,
-                onValueChange = { viewModel.onCityChanged(it) },
-                placeholder = { Text(text = stringResource(id = R.string.register_new_user_city)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                enabled = true,
-                titleTextField = R.string.register_new_user_city
-            )
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-
-            MitoTextField(
-                value = status.state,
-                onValueChange = { viewModel.onStateChanged(it) },
-                placeholder = { Text(text = stringResource(id = R.string.register_new_user_state)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                enabled = true,
-                titleTextField = R.string.register_new_user_state
-            )
-
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_extra_small)))
-
-            MitoTextField(
-                value = status.gender,
-                onValueChange = { viewModel.onGenderChanged(it) },
-                placeholder = { Text(text = stringResource(id = R.string.register_new_user_gender)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                enabled = true,
-                titleTextField = R.string.register_new_user_gender
-            )
-
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_Default)))
-
-            ButtonNewUserScreen(status, viewModel) {
-                viewModel.showConfirmDialog()
-            }
-            if (status.sheetValue == SheetValue.Expanded) {
-                MitoBottomSheet(
-                    mitoButtonSheet = MitoButtonSheet.CloseAppMitoButtonSheet(
-                        title = R.string.confirm_action,
-                        message = R.string.confirm_register_new_user,
-                        onDismissRequest = { viewModel.hideCloseDialog() },
-                        onDismiss = { viewModel.hideCloseDialog() },
-                        onConfirm = { navController.navigate(NavigationReferences.LoginReference.getRoute()) },
-                        sheetValue = status.sheetValue
-                    )
-                )
-            }else{
-                viewModel.hideCloseDialog()
-            }
+            viewModel.showConfirmDialog()
         }
+        if (status.sheetValue == SheetValue.Expanded) {
+            MitoBottomSheet(
+                mitoButtonSheet = MitoButtonSheet.CloseAppMitoButtonSheet(
+                    title = R.string.confirm_action,
+                    message = R.string.confirm_register_new_user,
+                    onDismissRequest = { viewModel.hideCloseDialog() },
+                    onDismiss = { viewModel.hideCloseDialog() },
+                    onConfirm = { navController.navigate(NavigationReferences.LoginReference.getRoute()) },
+                    sheetValue = status.sheetValue
+                )
+            )
+        } else {
+            viewModel.hideCloseDialog()
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun RegisterFields(
+    viewModel: NewUserViewModel,
+) {
+    val genderOptions by viewModel.genderOptions.collectAsState()
+    val stateOptions by viewModel.stateOptions.collectAsState()
+    val status by viewModel.status.collectAsState()
+
+    Column(
+        modifier = Modifier
+            .padding(extra_small_padding)
+            .fillMaxSize()
+            .background(Color.Transparent),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        MitoTextField.MitoTextFieldBasic(
+            value = status.username,
+            title = stringResource(com.mito.components.R.string.register_new_user_name),
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder),
+            onValueChange = { viewModel.onUserNamedChanged(it) },
+            isError = false,
+        ).Build()
+
+        Spacer(modifier = Modifier.padding(extra_small_padding))
+
+        MitoTextField.MitoTextFieldBasic(
+            value = status.email,
+            title = stringResource(R.string.login_text_field_intro_email),
+            isError = !viewModel.isValidEmail(status.email) && status.email.isNotBlank(),
+            textError = stringResource(R.string.register_new_user_email_error),
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder),
+            onValueChange = { viewModel.onEmailChanged(it) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+        ).Build()
+
+        Spacer(modifier = Modifier.padding(extra_small_padding))
+
+        MitoTextField.MitoTextFieldPassword(
+            value = status.password,
+            title = stringResource(R.string.login_text_field_intro_password),
+            isError = !viewModel.isValidPassword(status.password) && status.password.isNotBlank(),
+            textError = stringResource(R.string.register_new_user_password_error),
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder),
+            onValueChange = { viewModel.onPasswordChanged(it) }
+        ).Build()
+
+        Spacer(modifier = Modifier.padding(extra_small_padding))
+
+        MitoTextField.MitoTextFieldPassword(
+            value = status.confirmPassword,
+            title = stringResource(R.string.login_text_field_intro_confirm_password),
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder),
+            onValueChange = { viewModel.onConfirmPasswordChanged(it) }
+        ).Build()
+
+        Spacer(modifier = Modifier.padding(extra_small_padding))
+
+        MitoTextField.MitoTextFieldBasic(
+            value = status.address,
+            title = stringResource(com.mito.components.R.string.register_new_user_address),
+            isError = false,
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder),
+            onValueChange = { viewModel.onAddressChanged(it) }
+        ).Build()
+
+        Spacer(modifier = Modifier.padding(extra_small_padding))
+
+        MitoTextField.MitoTextFieldBasic(
+            value = status.numberPhone,
+            title = stringResource(com.mito.components.R.string.register_new_user_number_phone),
+            isError = false,
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder),
+            onValueChange = { viewModel.onNumberPhoneChanged(it) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+        ).Build()
+
+        Spacer(modifier = Modifier.padding(extra_small_padding))
+
+        MitoTextField.MitoTextFieldDataPicker(
+            value = status.birthDate,
+            title = stringResource(com.mito.components.R.string.register_new_user_birth_date),
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder_birthdate),
+            onValueChange = { viewModel.onBirthDateChanged(it) },
+            isError = status.isError,
+            textError = if (status.isError) status.error else null,
+            startDate = Calendar.getInstance(),
+            endDate = Calendar.getInstance()
+        ).Build()
+
+        Spacer(modifier = Modifier.padding(extra_small_padding))
+
+        MitoTextField.MitoTextFieldBasic(
+            value = status.city,
+            title = stringResource(com.mito.components.R.string.register_new_user_city),
+            isError = false,
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder),
+            onValueChange = { viewModel.onCityChanged(it) }
+        ).Build()
+
+        Spacer(modifier = Modifier.padding(extra_small_padding))
+
+        MitoTextField.MitoTextFieldDropDown(
+            value = status.gender,
+            title = stringResource(com.mito.components.R.string.register_new_user_gender),
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder_options),
+            onValueChange = { viewModel.onGenderChanged(it) },
+            options = genderOptions
+        ).Build()
+
+        Spacer(modifier = Modifier.padding(extra_small_padding))
+
+        MitoTextField.MitoTextFieldDropDown(
+            value = status.state,
+            title = stringResource(com.mito.components.R.string.register_new_user_state),
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder_options),
+            onValueChange = { viewModel.onStateChanged(it) },
+            options = stateOptions
+        ).Build()
     }
 }
 
@@ -281,7 +304,8 @@ fun HeaderTextNewUser(
     }
 }
 
-@ExperimentalMaterial3Api
+@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun NewUserScreenPreview() {

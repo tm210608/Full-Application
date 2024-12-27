@@ -38,7 +38,7 @@ material3 = "1.2.1"
 materialVersion = "1.6.8"
 runtimeAndroid = "1.6.8"
 foundationLayoutAndroid = "1.6.8"
-material3Android = "1.2.1"
+material3Android = "1.3.1"
 ui = "1.6.8"
 #noinspection GradleDependency
 uiTestJunit4 = "1.5.1"

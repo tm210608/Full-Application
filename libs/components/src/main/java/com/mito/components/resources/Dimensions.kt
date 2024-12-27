@@ -8,6 +8,9 @@ val primary_button_height = 55.dp
 val primary_button_padding = 8.dp
 val primary_button_corner_radius = 8.dp
 val primary_button_font_size = 16.sp
+val small_padding = 6.dp
+val extra_small_padding = 2.dp
+val medium_padding = 10.dp
 
 //Text
 val text_size_24 = 24.sp
