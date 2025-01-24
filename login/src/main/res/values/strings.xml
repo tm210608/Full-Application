@@ -19,5 +19,6 @@
     <string name="confirm_action">Confirm action</string>
     <string name="gender">Gender</string>
     <string name="register_new_user_email_error">The email format is not valid</string>
-    <string name="register_new_user_password_error">The password format is not valid</string>
+    <string name="register_new_user_password_error">It must contain a special character, a digit, an uppercase letter, a lowercase letter and contain more than 8 characters.</string>
+    <string name="register_new_user_confirm_password_error">The password and confirm password fields must be the same</string>
 </resources>

@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mito.components.resources.extra_small_padding
 import com.mito.components.resources.text_h2
 import com.mito.components.resources.text_h3
 
@@ -138,12 +139,16 @@ fun BottomSheetContentTwoButtons(
             SecondaryButton(
                 action = onDismiss,
                 text = dismissButtonText,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(extra_small_padding)
             )
             PrimaryButton(
                 action = onConfirm,
                 text = confirmButtonText,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(extra_small_padding)
             )
         }
     }

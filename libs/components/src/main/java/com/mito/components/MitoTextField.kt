@@ -1,13 +1,13 @@
 package com.mito.components
 
 import android.icu.util.Calendar
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
@@ -54,33 +55,10 @@ import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 
-/*
-ESTO ES UN EJEMPLO DE COMO PODRÍAS LLAMAR Y CREAR UN TEXTFIELD, USANDO EL PATRON BUILDER.
-
-Primero configuramos el modelo con el tipo que necesite y acabamos con un .Build()
-ese .Build() nos va devolver un composable.
-Como Build es una funcion del modelo principal, todas las clases dentro del sealed class
-por herencia heredan esa funcion. La funcion llama al composable que se encarga de redirigir
-al tipo que queremos.
-
-@Composable
-fun example(){
-    val textFieldModel = MitoTextField.MitoTextFieldBasic(
-        title = "Titulo del textField",
-        textError = "Texto de error",
-        placeholder = "Texto de placeHolder",
-        leadingIcon = @Composable { IconButton(onClick = { /*TODO*/ }) { }},
-        trailingIcon = @Composable { IconButton(onClick = { /*TODO*/ }) { }},
-        onValueChange = { /*TODO*/ },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-        enabled = true,
-    ).Build()
-}
-*/
-
 sealed class MitoTextField(
     open val value: String,
     open val title: String,
+    open val textRequired: String? = null,
     open val isError: Boolean = false,
     open val textError: String?,
     open val placeholder: String?,
@@ -93,16 +71,10 @@ sealed class MitoTextField(
     open val visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
 
-    //He creado 4 tipos de MitoTextFieldModel, si necesitas más que tengan configuraciones preestablecidas
-    //puedes ir agregandolos. Pero si vas a agregar uno que sea para el nombre no tiene mucho sentido,
-    //ya que solo lo usarias una vez. Incluso el password puede que no sea necesario, si no lo vamos
-    //a necesitar mas en la app.
-    //Los cuatro tipos son: MitoTextFieldBasic-> el basico para cualquiera, MitoTextFieldPassword,
-    //MitoTextFieldDropDown, MitoTextFieldDataPicker.
-
     data class MitoTextFieldBasic(
         override val value: String,
         override val title: String,
+        override val textRequired: String? = null,
         override val isError: Boolean = false,
         override val textError: String? = null,
         override val placeholder: String?,
@@ -116,6 +88,7 @@ sealed class MitoTextField(
     ) : MitoTextField(
         value = value,
         title = title,
+        textRequired = textRequired,
         isError = isError,
         textError = textError,
         placeholder = placeholder,
@@ -134,24 +107,28 @@ sealed class MitoTextField(
         override val isError: Boolean = false,
         override val textError: String? = null,
         override val title: String,
+        override val textRequired: String? = null,
         override val placeholder: String?,
+        override val leadingIcon: @Composable (() -> Unit)? = null,
         override val enabled: Boolean = true,
     ) : MitoTextField(
         value = value,
         title = title,
+        textRequired  = textRequired,
         isError = isError,
         textError = textError,
         placeholder = placeholder,
-        trailingIcon = @Composable { IconButton(onClick = { /*TODO*/ }) { } },
+        trailingIcon = @Composable { IconButton(onClick = {  }) { } },
         onValueChange = onValueChange,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         enabled = enabled,
-        leadingIcon = null,
+        leadingIcon = leadingIcon,
     )
 
     data class MitoTextFieldDropDown(
         override val value: String,
         override val title: String,
+        override val textRequired: String? = null,
         override val placeholder: String?,
         override val onValueChange: (String) -> Unit,
         override val enabled: Boolean = true,
@@ -159,17 +136,19 @@ sealed class MitoTextField(
     ) : MitoTextField(
         value = value,
         title = title,
+        textRequired = textRequired,
         textError = null,
         placeholder = placeholder,
         onValueChange = onValueChange,
         enabled = enabled,
         leadingIcon = null,
-        trailingIcon = @Composable { IconButton(onClick = { /*TODO*/ }) { } },
+        trailingIcon = @Composable { IconButton(onClick = { }) { } },
     )
 
     data class MitoTextFieldDataPicker(
         override val value: String,
         override val title: String,
+        override val textRequired: String? = null,
         override val textError: String? = null,
         override val isError: Boolean = false,
         override val placeholder: String?,
@@ -180,21 +159,20 @@ sealed class MitoTextField(
     ) : MitoTextField(
         value = value,
         title = title,
+        textRequired = textRequired,
         placeholder = placeholder,
         isError = isError,
         textError = textError,
         onValueChange = onValueChange,
         enabled = enabled,
-        leadingIcon = @Composable { IconButton(onClick = { /*TODO*/ }) { } },
+        leadingIcon = @Composable { IconButton(onClick = { }) { } },
         trailingIcon = null
     )
 
-    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun Build() = MitoTextField(this)
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun MitoTextField(textFieldModel: MitoTextField) {
 
@@ -208,53 +186,57 @@ private fun MitoTextField(textFieldModel: MitoTextField) {
 
 @Composable
 private fun MitoTextFieldCustom(textFieldModel: MitoTextField) {
-    //Aqui tienes que crear el composable de tu textField personalizado.
-    //De forma muy generica, con las caracteristicas que compartan todos los tipos de textField.
 
-    OutlinedTextField(
-        value = textFieldModel.value,
-        onValueChange = textFieldModel.onValueChange,
-        modifier = Modifier.fillMaxWidth(),
-        label = { Text(text = textFieldModel.title) },
-        placeholder = { Text(text = textFieldModel.placeholder ?: "") },
-        leadingIcon = textFieldModel.leadingIcon,
-        trailingIcon = textFieldModel.trailingIcon,
-        keyboardOptions = textFieldModel.keyboardOptions,
-        colors = TextFieldDefaults.colors(
-            focusedTextColor = Color(0xFF21241D),
-            unfocusedTextColor = Color(0xFF394132),
-            focusedContainerColor = Color(0xFF9AE485),
-            unfocusedContainerColor = Color(0xFF9AE485),
-            focusedIndicatorColor = Color(0xFFE96D34),
-            unfocusedIndicatorColor = Color.Transparent,
-            focusedPlaceholderColor = Color(0xFF21241D),
-            unfocusedPlaceholderColor = Color(0xFF394132),
-            cursorColor = Color(0xFFE96D34),
-        ),
-        singleLine = true,
-        maxLines = 1,
-        visualTransformation = textFieldModel.visualTransformation,
-        isError = textFieldModel.isError,
-        supportingText = {
-            if (textFieldModel.isError) {
-                Text(
-                    text = textFieldModel.textError ?: "",
-                    color = Color.Red,
-                    style = MaterialTheme.typography.labelSmall
-                )
-            }
-        },
-        readOnly = textFieldModel.readOnly,
-        enabled = true
-    )
+    Column( modifier = Modifier.wrapContentSize()) {
+        textFieldModel.textRequired?.let {
+            MitoTextBasic(
+                text = textFieldModel.textRequired.toString(),
+                modifier = Modifier.align(Alignment.Start),
+                color = Color.Gray
+            )
+        }
+        OutlinedTextField(
+            value = textFieldModel.value,
+            onValueChange = textFieldModel.onValueChange,
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text(text = textFieldModel.title) },
+            placeholder = { Text(text = textFieldModel.placeholder ?: "") },
+            leadingIcon = textFieldModel.leadingIcon,
+            trailingIcon = textFieldModel.trailingIcon,
+            keyboardOptions = textFieldModel.keyboardOptions,
+            colors = TextFieldDefaults.colors(
+                focusedTextColor = Color(0xFF21241D),
+                unfocusedTextColor = Color(0xFF394132),
+                focusedContainerColor = Color(0xFF9AE485),
+                unfocusedContainerColor = Color(0xFF9AE485),
+                focusedIndicatorColor = Color(0xFFE96D34),
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedPlaceholderColor = Color(0xFF21241D),
+                unfocusedPlaceholderColor = Color(0xFF394132),
+                cursorColor = Color(0xFFE96D34),
+            ),
+            singleLine = true,
+            maxLines = 1,
+            visualTransformation = textFieldModel.visualTransformation,
+            isError = textFieldModel.isError,
+            supportingText = {
+                if (textFieldModel.isError) {
+                    Text(
+                        text = textFieldModel.textError ?: "",
+                        color = Color.Red,
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                }
+            },
+            readOnly = textFieldModel.readOnly,
+            enabled = true
+        )
+    }
 }
 
 @Composable
 private fun MitoTextFieldDropDown(textFieldModel: MitoTextField.MitoTextFieldDropDown) {
-    //Creamos un Dropdown y al textfield del DropDown le ponemos las caracteristicas del MitoTextFieldCustom
 
-    //NO SE EXACTAMENTE COMO SE MONTA EL DROPDOWN, PERO SI TIENES QUE USAR UN TextField, que sea
-    //el MitoTextFieldCustom el que te lo monte, para que repita las caracteristicas.
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf(" ") }
     var textFieldWidth by remember { mutableStateOf(Size.Zero) }
@@ -340,6 +322,7 @@ private fun MitoTextFieldPassword(textFieldModel: MitoTextField.MitoTextFieldPas
             value = textFieldModel.value,
             onValueChange = textFieldModel.onValueChange,
             title = textFieldModel.title,
+            textRequired = textFieldModel.textRequired,
             placeholder = textFieldModel.placeholder,
             trailingIcon = {
                 IconButton(
@@ -357,6 +340,7 @@ private fun MitoTextFieldPassword(textFieldModel: MitoTextField.MitoTextFieldPas
                     }
                 }
             },
+            leadingIcon = textFieldModel.leadingIcon,
             isError = textFieldModel.isError,
             textError = textFieldModel.textError,
             visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
@@ -367,14 +351,24 @@ private fun MitoTextFieldPassword(textFieldModel: MitoTextField.MitoTextFieldPas
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MitoTextFieldDataPicker(textFieldModel: MitoTextField.MitoTextFieldDataPicker) {
 
     var expanded by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf(textFieldModel.value) }
-    val currentYear = LocalDate.now().year
-    val datePickerState = rememberDatePickerState(yearRange = IntRange(1900, currentYear))
+
+    val startDateMillis = textFieldModel.startDate. timeInMillis
+    val endDateMillis = textFieldModel.endDate.timeInMillis
+
+    val datePickerState = rememberDatePickerState(
+        yearRange = IntRange(1900, LocalDate.now().year),
+        initialSelectedDateMillis = null,
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis in startDateMillis..endDateMillis
+            }
+        }
+    )
 
     MitoTextFieldCustom(
         textFieldModel = MitoTextField.MitoTextFieldBasic(
@@ -384,6 +378,7 @@ fun MitoTextFieldDataPicker(textFieldModel: MitoTextField.MitoTextFieldDataPicke
                 textFieldModel.onValueChange(it)
             },
             title = textFieldModel.title,
+            textRequired = textFieldModel.textRequired,
             placeholder = textFieldModel.placeholder,
             trailingIcon = {
                 IconButton(
@@ -445,13 +440,18 @@ fun MitoTextFieldDataPicker(textFieldModel: MitoTextField.MitoTextFieldDataPicke
                     .align(Alignment.CenterHorizontally),
                 title = {
                     Text(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp)
+                            .align(Alignment.CenterHorizontally),
                         text = stringResource(R.string.birthDate)
                     )
                 },
                 headline = {
                     Text(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
                         text = stringResource(R.string.select_date)
                     )
                 },
@@ -471,6 +471,7 @@ fun MitoTextFieldCustomPreview() {
         textFieldModel = MitoTextField.MitoTextFieldBasic(
             value = text,
             title = "Nombre",
+            textRequired = "Campo requerido",
             placeholder = "Introduce tu nombre",
             onValueChange = { text = it },
             enabled = true
@@ -508,13 +509,13 @@ fun MitoTextFieldPasswordPreview() {
             value = text,
             onValueChange = { text = it },
             title = "Contraseña",
+            textRequired = "Campo requerido",
             placeholder = "Introduce tu contraseña",
-            enabled = true
+            enabled = true,
         )
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun MitoTextFieldDataPickerPreview() {
@@ -523,6 +524,7 @@ fun MitoTextFieldDataPickerPreview() {
         textFieldModel = MitoTextField.MitoTextFieldDataPicker(
             value = "",
             title = "Fecha de nacimiento",
+            textRequired = "Campo requerido",
             placeholder = "Selecciona una fecha",
             startDate = Calendar.getInstance(),
             endDate = Calendar.getInstance(),

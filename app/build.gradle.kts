@@ -12,7 +12,7 @@ android {
     //noinspection OldTargetApi
     defaultConfig {
         applicationId = "com.mito.fullapplication"
-        minSdk = 24
+         minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
