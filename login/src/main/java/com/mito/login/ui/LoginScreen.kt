@@ -3,9 +3,7 @@
 package com.mito.login.ui
 
 
-import android.os.Build
 import androidx.activity.compose.BackHandler
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,7 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
@@ -32,7 +29,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SheetValue.Hidden
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -46,7 +42,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -79,7 +74,6 @@ import kotlin.system.exitProcess
 class LoginScreen : Screen {
     override val route: String = NavigationReferences.LoginReference.getRoute()
 
-    @RequiresApi(Build.VERSION_CODES.O)
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content(navController: NavHostController) {
@@ -104,7 +98,6 @@ class LoginScreen : Screen {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
 
@@ -133,7 +126,6 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Login(viewModel: LoginViewModel, navController: NavHostController) {
 
@@ -153,9 +145,31 @@ fun Login(viewModel: LoginViewModel, navController: NavHostController) {
 
         Spacer(modifier = Modifier.weight(1f))
 
-        EmailItem(status) { viewModel.onLoginChanged(it, status.password) }
+        MitoTextField.MitoTextFieldBasic(
+            value = status.username,
+            onValueChange = { viewModel.onLoginChanged(it, status.password) },
+            title = stringResource(id = R.string.login_text_field_intro_email),
+            placeholder = stringResource(id = R.string.login_text_field_intro_email),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Email,
+                    contentDescription = stringResource(id = R.string.login_text_field_intro_email)
+                )
+            }
+        ).Build()
 
-        PasswordItem(status) { viewModel.onLoginChanged(status.username, it) }
+        MitoTextField.MitoTextFieldPassword(
+            value = status.password,
+            onValueChange = { viewModel.onLoginChanged(status.username, it) },
+            title = stringResource(id = R.string.login_text_field_intro_password),
+            placeholder = stringResource(id = R.string.login_text_field_intro_password),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = stringResource(id = R.string.login_text_field_intro_password)
+                )
+            }
+        ).Build()
 
         Spacer(modifier = Modifier.weight(0.1f))
 
@@ -267,40 +281,6 @@ fun ForgotPassword(modifier: Modifier) {
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun PasswordItem(
-    status: Status,
-    onTextFieldChanged: (String) -> Unit,
-) {
-    MitoTextField(
-        value = status.password,
-        onValueChange = { onTextFieldChanged(it) },
-        placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_password)) },
-        leadingIcon = { Icon(imageVector = Icons.Filled.Lock, contentDescription = null) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        showTrailingIcon = true,
-        showPassword = true,
-        enabled = status.isLoading.not()
-    )
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun EmailItem(
-    status: Status,
-    onTextFieldChanged: (String) -> Unit,
-) {
-    MitoTextField(
-        value = status.username,
-        onValueChange = { onTextFieldChanged(it) },
-        placeholder = { Text(text = stringResource(id = R.string.login_text_field_intro_email)) },
-        leadingIcon = { Icon(imageVector = Icons.Filled.Email, contentDescription = null) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        enabled = status.isLoading.not(),
-    )
-}
-
 @Composable
 fun MainImage(modifier: Modifier, navController: NavHostController) {
     Image(
@@ -320,7 +300,6 @@ fun MainImage(modifier: Modifier, navController: NavHostController) {
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(
     showBackground = true,
     showSystemUi = true

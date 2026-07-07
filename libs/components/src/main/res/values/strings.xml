@@ -7,7 +7,7 @@
     <string name="close_app_message_dialog">Are you sure you want to close the app?</string>
     <string name="continue_button">Continue</string>
     <string name="options">OPTIONS</string>
-    <string name="birthDate">birth date</string>
+    <string name="birthDate">Birth Date</string>
     <string name="select_date">Select day</string>
     <string name="information">Information</string>
     <string name="age_error_message">Only people over 18 years old can register</string>
@@ -19,7 +19,8 @@
     <string name="register_new_user_city">city</string>
     <string name="register_new_user_state">state</string>
     <string name="register_new_user_gender">gender</string>
-    <string name="register_new_user_placeholder">Write here</string>
     <string name="register_new_user_placeholder_options">Choose and option</string>
     <string name="register_new_user_placeholder_birthdate">Choose a date</string>
+    <string name="register_new_user_required_fields">* Required Files *</string>
+    <string name="register_new_user_required_birthdate">* Only those over 18 years of age can register *</string>
 </resources>

@@ -1,8 +1,6 @@
 package com.mito.login.ui
 
 import android.icu.util.Calendar
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -53,7 +51,6 @@ import com.mito.login.ui.NewUserViewModel.NewUserStatus
 class NewUserScreen : Screen {
     override val route: String = NavigationReferences.NewUserReference.getRoute()
 
-    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     override fun Content(navController: NavHostController) {
         val viewModel = hiltViewModel<NewUserViewModel>()
@@ -61,7 +58,6 @@ class NewUserScreen : Screen {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterial3Api
 @Composable
 fun NewUserScreen(navController: NavHostController, viewModel: NewUserViewModel) {
@@ -97,7 +93,6 @@ fun NewUserScreen(navController: NavHostController, viewModel: NewUserViewModel)
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterial3Api
 @Composable
 fun NewUserRegister(
@@ -144,7 +139,6 @@ fun NewUserRegister(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RegisterFields(
     viewModel: NewUserViewModel,
@@ -152,6 +146,20 @@ fun RegisterFields(
     val genderOptions by viewModel.genderOptions.collectAsState()
     val stateOptions by viewModel.stateOptions.collectAsState()
     val status by viewModel.status.collectAsState()
+
+    // Calcular la fecha máxima (hoy - 18 años)
+    val maxDateCalendar = Calendar.getInstance().apply {
+        add(Calendar.YEAR, -18)
+    }
+
+    // Calcular la fecha mínima (1900)
+    val minDateCalendar = Calendar.getInstance().apply {
+        set(Calendar.YEAR, 1900)
+    }
+
+    //Convertir a string las opciones de los dropdowns
+    val genderOptionsString = genderOptions.map { it.toString() }
+    val stateOptionsString = stateOptions.map { it.toString() }
 
     Column(
         modifier = Modifier
@@ -165,7 +173,7 @@ fun RegisterFields(
         MitoTextField.MitoTextFieldBasic(
             value = status.username,
             title = stringResource(com.mito.components.R.string.register_new_user_name),
-            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder),
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_name),
             onValueChange = { viewModel.onUserNamedChanged(it) },
             isError = false,
         ).Build()
@@ -175,9 +183,10 @@ fun RegisterFields(
         MitoTextField.MitoTextFieldBasic(
             value = status.email,
             title = stringResource(R.string.login_text_field_intro_email),
+            textRequired = stringResource(com.mito.components.R.string.register_new_user_required_fields),
             isError = !viewModel.isValidEmail(status.email) && status.email.isNotBlank(),
             textError = stringResource(R.string.register_new_user_email_error),
-            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder),
+            placeholder = stringResource(R.string.login_text_field_intro_email),
             onValueChange = { viewModel.onEmailChanged(it) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
         ).Build()
@@ -185,40 +194,47 @@ fun RegisterFields(
         Spacer(modifier = Modifier.padding(extra_small_padding))
 
         MitoTextField.MitoTextFieldPassword(
-            value = status.password,
-            title = stringResource(R.string.login_text_field_intro_password),
-            isError = !viewModel.isValidPassword(status.password) && status.password.isNotBlank(),
+            value = status.passwordInfo.password,
+            onValueChange = { viewModel.onPasswordChanged(it) },
+            isError = !viewModel.isValidPassword(status.passwordInfo.password)
+                    && status.passwordInfo.password.isNotBlank(),
             textError = stringResource(R.string.register_new_user_password_error),
-            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder),
-            onValueChange = { viewModel.onPasswordChanged(it) }
+            title = stringResource(R.string.login_text_field_intro_password),
+            textRequired = stringResource(com.mito.components.R.string.register_new_user_required_fields),
+            placeholder = stringResource(R.string.login_text_field_intro_password),
         ).Build()
 
         Spacer(modifier = Modifier.padding(extra_small_padding))
 
         MitoTextField.MitoTextFieldPassword(
-            value = status.confirmPassword,
+            value = status.passwordInfo.confirmPassword,
+            onValueChange = { viewModel.onConfirmPasswordChanged(it) },
+            isError = !viewModel.isValidConfirmPassword(
+                status.passwordInfo.password,
+                status.passwordInfo.confirmPassword) && status.passwordInfo.confirmPassword.isNotBlank(),
+            textError = stringResource(R.string.register_new_user_confirm_password_error),
             title = stringResource(R.string.login_text_field_intro_confirm_password),
-            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder),
-            onValueChange = { viewModel.onConfirmPasswordChanged(it) }
+            textRequired = stringResource(com.mito.components.R.string.register_new_user_required_fields),
+            placeholder = stringResource(R.string.login_text_field_intro_confirm_password),
         ).Build()
 
         Spacer(modifier = Modifier.padding(extra_small_padding))
 
         MitoTextField.MitoTextFieldBasic(
-            value = status.address,
+            value = status.addressInfo.address,
             title = stringResource(com.mito.components.R.string.register_new_user_address),
             isError = false,
-            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder),
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_address),
             onValueChange = { viewModel.onAddressChanged(it) }
         ).Build()
 
         Spacer(modifier = Modifier.padding(extra_small_padding))
 
         MitoTextField.MitoTextFieldBasic(
-            value = status.numberPhone,
+            value = status.contactInfo.numberPhone,
             title = stringResource(com.mito.components.R.string.register_new_user_number_phone),
             isError = false,
-            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder),
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_number_phone),
             onValueChange = { viewModel.onNumberPhoneChanged(it) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
         ).Build()
@@ -226,23 +242,24 @@ fun RegisterFields(
         Spacer(modifier = Modifier.padding(extra_small_padding))
 
         MitoTextField.MitoTextFieldDataPicker(
-            value = status.birthDate,
+            value = status.birthDateInfo.birthDate,
             title = stringResource(com.mito.components.R.string.register_new_user_birth_date),
-            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder_birthdate),
+            textRequired = stringResource(com.mito.components.R.string.register_new_user_required_birthdate),
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_birth_date),
             onValueChange = { viewModel.onBirthDateChanged(it) },
             isError = status.isError,
             textError = if (status.isError) status.error else null,
-            startDate = Calendar.getInstance(),
-            endDate = Calendar.getInstance()
+            startDate = minDateCalendar,
+            endDate = maxDateCalendar
         ).Build()
 
         Spacer(modifier = Modifier.padding(extra_small_padding))
 
         MitoTextField.MitoTextFieldBasic(
-            value = status.city,
+            value = status.addressInfo.city,
             title = stringResource(com.mito.components.R.string.register_new_user_city),
             isError = false,
-            placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder),
+            placeholder = stringResource(com.mito.components.R.string.register_new_user_city),
             onValueChange = { viewModel.onCityChanged(it) }
         ).Build()
 
@@ -253,17 +270,17 @@ fun RegisterFields(
             title = stringResource(com.mito.components.R.string.register_new_user_gender),
             placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder_options),
             onValueChange = { viewModel.onGenderChanged(it) },
-            options = genderOptions
+            options = genderOptionsString
         ).Build()
 
         Spacer(modifier = Modifier.padding(extra_small_padding))
 
         MitoTextField.MitoTextFieldDropDown(
-            value = status.state,
+            value = status.addressInfo.state,
             title = stringResource(com.mito.components.R.string.register_new_user_state),
             placeholder = stringResource(com.mito.components.R.string.register_new_user_placeholder_options),
             onValueChange = { viewModel.onStateChanged(it) },
-            options = stateOptions
+            options = stateOptionsString
         ).Build()
     }
 }
@@ -273,7 +290,7 @@ fun RegisterFields(
 fun ButtonNewUserScreen(
     status: NewUserStatus,
     viewModel: NewUserViewModel,
-    onLoginSelected: () -> Unit
+    onLoginSelected: () -> Unit,
 ) {
     PrimaryButton(
         action = onLoginSelected,
@@ -305,7 +322,6 @@ fun HeaderTextNewUser(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun NewUserScreenPreview() {
