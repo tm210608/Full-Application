@@ -2,9 +2,6 @@
 
 Aplicación Android multi-módulo con arquitectura MVVM + Clean Architecture, construida con Jetpack Compose, Hilt, Room y Retrofit.
 
-## Estado Actual
-⚠️ **Alpha temprana** — La aplicación tiene login funcional pero las pantallas principales están en fase de maqueta.
-
 ## Stack Tecnológico
 
 | Capa | Tecnología |
@@ -14,6 +11,7 @@ Aplicación Android multi-módulo con arquitectura MVVM + Clean Architecture, co
 | Persistencia | Room |
 | Red | Retrofit + Gson |
 | Navegación | Navigation Compose |
+| Tests | JUnit 5 + MockK + Turbine |
 | Build | Gradle KTS + Version Catalog |
 
 ## Módulos
@@ -35,12 +33,12 @@ Aplicación Android multi-módulo con arquitectura MVVM + Clean Architecture, co
 
 - ✅ Welcome Screen (animada)
 - ✅ Login Screen (email/password)
-- ✅ New User Registration (formulario completo con validación)
+- ✅ New User Registration (formulario completo con validación + persistencia)
 - ✅ Home Screen (Scaffold + Drawer + BottomNav + HorizontalPager)
-- 🚧 Main Screen (placeholder)
-- 🚧 Search Screen (placeholder)
-- 🚧 Favorites Screen (placeholder)
-- 🚧 Settings Screen (placeholder)
+- ✅ Main Screen (dashboard con cards)
+- ✅ Search Screen (barra de búsqueda + resultados)
+- ✅ Favorites Screen (estado vacío)
+- ✅ Settings Screen (lista de opciones)
 
 ## Cómo compilar
 
@@ -48,9 +46,8 @@ Aplicación Android multi-módulo con arquitectura MVVM + Clean Architecture, co
 ./gradlew assembleDebug
 ```
 
-## Próximos pasos
+## Tests
 
-- [ ] Mergear PR #22 (fix MitoTextField)
-- [ ] Implementar pantallas reales (Main, Search, Favorites, Settings)
-- [ ] Añadir tests unitarios y UI tests
-- [ ] Configurar GitHub Actions CI/CD
+```bash
+./gradlew test
+```

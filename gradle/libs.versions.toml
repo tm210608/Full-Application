@@ -1,5 +1,8 @@
 [versions]
 accompanistPager = "0.28.0"
+mockk = "1.13.12"
+turbine = "1.1.0"
+coroutinesTest = "1.8.1"
 #noinspection GradleDependency,AndroidGradlePluginVersion
 activityComposeVersion = "1.8.2"
 #noinspection AndroidGradlePluginVersion
@@ -98,6 +101,9 @@ ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "uiTooli
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesTest" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

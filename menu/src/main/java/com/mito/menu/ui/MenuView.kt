@@ -45,30 +45,22 @@ fun MenuView(navController: NavHostController, exitAction: () -> Unit) {
                 title = stringResource(id = R.string.profile_menu_text),
                 icon = Icons.Default.Person,
                 contentDescription = stringResource(id = R.string.profile_menu_content_description)
-            ) {
-                //navigate to Profile screen
-            }
+            ) { }
             MenuItemView(
                 title = stringResource(id = R.string.about_us_menu_text),
                 icon = Icons.Default.Info,
                 contentDescription = stringResource(id = R.string.about_us_menu_content_description)
-            ) {
-                //navigate to About Us screen
-            }
+            ) { }
             MenuItemView(
                 title = stringResource(id = R.string.notifications_menu_text),
                 icon = Icons.Default.Notifications,
                 contentDescription = stringResource(id = R.string.notifications_menu_content_description)
-            ) {
-                //navigate to Notifications screen
-            }
+            ) { }
             MenuItemView(
                 title = stringResource(id = R.string.feedback_menu_text),
                 icon = Icons.Default.Email,
                 contentDescription = stringResource(id = R.string.feedback_menu_content_description)
-            ) {
-                //navigate to Feedback screen
-            }
+            ) { }
 
         }
         Column (modifier = Modifier.align(Alignment.BottomCenter)){

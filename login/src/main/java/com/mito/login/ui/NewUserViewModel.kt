@@ -6,14 +6,18 @@ import android.util.Patterns
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mito.common.tools.EMPTY_STRING
 import com.mito.common.tools.Gender
 import com.mito.common.tools.State
+import com.mito.login.domain.RegisterUserUseCase
+import com.mito.network.dummy_login.domain.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.time.DateTimeException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -22,7 +26,7 @@ import javax.inject.Inject
 @ExperimentalMaterial3Api
 @HiltViewModel
 class NewUserViewModel @Inject constructor(
-
+    private val registerUserUseCase: RegisterUserUseCase
 ) : ViewModel() {
 
     private val _status: MutableStateFlow<NewUserStatus> = MutableStateFlow(NewUserStatus())
@@ -47,6 +51,7 @@ class NewUserViewModel @Inject constructor(
         val gender: String = EMPTY_STRING,
         val isError: Boolean = false,
         val isButtonEnabled: Boolean = false,
+        val isRegistered: Boolean = false,
         val sheetValue: SheetValue = SheetValue.Hidden,
     )
 
@@ -180,6 +185,34 @@ class NewUserViewModel @Inject constructor(
         )
         _status.update { updateStatus }
         return updateStatus.isButtonEnabled
+    }
+
+    fun confirmRegistration() {
+        viewModelScope.launch {
+            val s = _status.value
+            val gender = when (s.gender) {
+                Gender.MALE.toString() -> com.mito.network.dummy_login.domain.Gender.MALE
+                Gender.FEMALE.toString() -> com.mito.network.dummy_login.domain.Gender.FEMALE
+                else -> null
+            }
+            val user = User(
+                name = s.username,
+                email = s.email,
+                password = s.passwordInfo.password,
+                birthday = s.birthDateInfo.birthDate,
+                phone = s.contactInfo.numberPhone,
+                address = s.addressInfo.address,
+                city = s.addressInfo.city,
+                state = s.addressInfo.state,
+                gender = gender
+            )
+            try {
+                registerUserUseCase(user)
+                _status.update { it.copy(sheetValue = SheetValue.Hidden, isRegistered = true) }
+            } catch (e: Exception) {
+                _status.update { it.copy(error = e.message ?: "Registration failed", isError = true) }
+            }
+        }
     }
 
     fun showConfirmDialog() {

@@ -98,6 +98,9 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.ui.tooling.preview.android)
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

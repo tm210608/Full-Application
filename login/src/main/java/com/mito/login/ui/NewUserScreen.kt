@@ -121,14 +121,18 @@ fun NewUserRegister(
 
             viewModel.showConfirmDialog()
         }
-        if (status.sheetValue == SheetValue.Expanded) {
+        if (status.isRegistered) {
+            navController.navigate(NavigationReferences.LoginReference.getRoute()) {
+                popUpTo(NavigationReferences.NewUserReference.getRoute()) { inclusive = true }
+            }
+        } else if (status.sheetValue == SheetValue.Expanded) {
             MitoBottomSheet(
                 mitoButtonSheet = MitoButtonSheet.CloseAppMitoButtonSheet(
                     title = R.string.confirm_action,
                     message = R.string.confirm_register_new_user,
                     onDismissRequest = { viewModel.hideCloseDialog() },
                     onDismiss = { viewModel.hideCloseDialog() },
-                    onConfirm = { navController.navigate(NavigationReferences.LoginReference.getRoute()) },
+                    onConfirm = { viewModel.confirmRegistration() },
                     sheetValue = status.sheetValue
                 )
             )
