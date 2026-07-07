@@ -52,8 +52,7 @@ dependencies {
     //Compose
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.runtime.android)
-    implementation (libs.accompanist.pager)
-    implementation (libs.accompanist.pager.indicators)
+    implementation(libs.androidx.foundation.android)
 
     //Android Studio Preview support
     implementation(libs.ui.tooling.preview)
