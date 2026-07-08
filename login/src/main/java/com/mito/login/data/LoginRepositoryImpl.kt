@@ -1,18 +1,18 @@
 package com.mito.login.data
 
-import com.mito.login.domain.DummyLoginDataSource
-import com.mito.login.domain.DummyLoginRepository
+import com.mito.login.domain.LoginDataSource
+import com.mito.login.domain.LoginRepository
 import com.mito.login.domain.UserDataSource
 import com.mito.network.BuildConfig
-import com.mito.network.dummy_login.data.response.LoginResponse
+import com.mito.network.auth.data.response.LoginResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class DummyLoginRepositoryImpl @Inject constructor(
-    private val loginDataSource: DummyLoginDataSource,
+class LoginRepositoryImpl @Inject constructor(
+    private val loginDataSource: LoginDataSource,
     private val userDataSource: UserDataSource
-) : DummyLoginRepository {
+) : LoginRepository {
     override suspend fun login(
         username: String,
         password: String

@@ -1,7 +1,7 @@
-package com.mito.network.dummy_login.data
+package com.mito.network.auth.data
 
-import com.mito.network.dummy_login.data.request.LoginRequest
-import com.mito.network.dummy_login.data.response.LoginResponse
+import com.mito.network.auth.data.request.LoginRequest
+import com.mito.network.auth.data.response.LoginResponse
 import retrofit2.http.POST
 import retrofit2.Response
 import retrofit2.http.Body

@@ -9,16 +9,16 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class DummyLoginUseCaseTest {
+class LoginUseCaseTest {
 
-    private val repository: DummyLoginRepository = mockk()
-    private val useCase = DummyLoginUseCase(repository)
+    private val repository: LoginRepository = mockk()
+    private val useCase = LoginUseCase(repository)
 
     @Test
     fun `invoke returns success when login succeeds`() = runTest {
         val input = Input("user@example.com", "password")
         coEvery { repository.login(input.email, input.password) } returns Pair(
-            Result.success(com.mito.network.dummy_login.data.response.LoginResponse("Login OK", "ok")),
+            Result.success(com.mito.network.auth.data.response.LoginResponse("Login OK", "ok")),
             1
         )
 

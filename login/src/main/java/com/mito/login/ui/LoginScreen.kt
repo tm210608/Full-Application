@@ -60,13 +60,13 @@ import com.mito.core.navigation.Screen
 import com.mito.database.data.dao.UserDao
 import com.mito.database.data.entity.UserEntity
 import com.mito.login.R
-import com.mito.login.data.DummyLoginDataSourceImpl
-import com.mito.login.data.DummyLoginRepositoryImpl
+import com.mito.login.data.LoginDataSourceImpl
+import com.mito.login.data.LoginRepositoryImpl
 import com.mito.login.data.UserDataSourceImpl
-import com.mito.login.domain.DummyLoginUseCase
-import com.mito.network.dummy_login.data.LoginService
-import com.mito.network.dummy_login.data.request.LoginRequest
-import com.mito.network.dummy_login.data.response.LoginResponse
+import com.mito.login.domain.LoginUseCase
+import com.mito.network.auth.data.LoginService
+import com.mito.network.auth.data.request.LoginRequest
+import com.mito.network.auth.data.response.LoginResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import kotlin.system.exitProcess
@@ -308,15 +308,15 @@ fun MainImage(modifier: Modifier, navController: NavHostController) {
 fun LoginScreenPreview() {
 
     val loginService = FakeLoginService()
-    val repository = DummyLoginRepositoryImpl(
-        DummyLoginDataSourceImpl(loginService),
+    val repository = LoginRepositoryImpl(
+        LoginDataSourceImpl(loginService),
         UserDataSourceImpl(FakeUserDao)
     )
-    val dummyLoginUseCase = DummyLoginUseCase(repository)
+    val loginUseCase = LoginUseCase(repository)
 
     LoginScreen(
         navController = NavHostController(LocalContext.current),
-        viewModel = LoginViewModel(dummyLoginUseCase)
+        viewModel = LoginViewModel(loginUseCase)
     )
 }
 

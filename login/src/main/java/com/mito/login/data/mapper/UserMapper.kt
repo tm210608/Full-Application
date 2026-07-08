@@ -1,8 +1,8 @@
 package com.mito.login.data.mapper
 
 import com.mito.database.data.entity.UserEntity
-import com.mito.network.dummy_login.domain.Gender
-import com.mito.network.dummy_login.domain.User
+import com.mito.network.auth.domain.Gender
+import com.mito.network.auth.domain.User
 
 fun User.toEntity(): UserEntity {
     return UserEntity(

@@ -1,4 +1,4 @@
-package com.mito.network.dummy_login.data.response
+package com.mito.network.auth.data.response
 
 import com.google.gson.annotations.SerializedName
 

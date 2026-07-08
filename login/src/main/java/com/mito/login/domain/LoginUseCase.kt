@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 
-class DummyLoginUseCase @Inject constructor(private val repository: DummyLoginRepository) {
+class LoginUseCase @Inject constructor(private val repository: LoginRepository) {
 
     suspend operator fun invoke(input: Input): Flow<Result<LoginUIModel>> = flow {
         repository.login(input.email, input.password).let { pair ->

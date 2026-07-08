@@ -4,7 +4,7 @@ import com.mito.database.data.dao.UserDao
 import com.mito.login.data.mapper.toEntity
 import com.mito.login.domain.UserDataSource
 import com.mito.network.BuildConfig
-import com.mito.network.dummy_login.domain.User
+import com.mito.network.auth.domain.User
 import javax.inject.Inject
 
 class UserDataSourceImpl @Inject constructor(
