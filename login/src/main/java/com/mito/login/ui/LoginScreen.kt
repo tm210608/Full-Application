@@ -31,7 +31,6 @@ import androidx.compose.material3.SheetValue.Hidden
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,19 +56,11 @@ import com.mito.components.MitoTextField
 import com.mito.components.PrimaryButton
 import com.mito.components.resources.error_color
 import com.mito.core.navigation.Screen
-import com.mito.database.data.dao.UserDao
-import com.mito.database.data.entity.UserEntity
 import com.mito.login.R
 import com.mito.login.data.LoginDataSourceImpl
 import com.mito.login.data.LoginRepositoryImpl
 import com.mito.login.data.UserDataSourceImpl
 import com.mito.login.domain.LoginUseCase
-import com.mito.network.auth.data.LoginService
-import com.mito.network.auth.data.request.LoginRequest
-import com.mito.network.auth.data.response.LoginResponse
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import retrofit2.Response
 import kotlin.system.exitProcess
 
 class LoginScreen : Screen {
@@ -308,10 +299,10 @@ fun MainImage(modifier: Modifier, navController: NavHostController) {
 @Composable
 fun LoginScreenPreview() {
 
-    val loginService = FakeLoginService()
+    val loginService = com.mito.login.preview.FakeLoginService()
     val repository = LoginRepositoryImpl(
         LoginDataSourceImpl(loginService),
-        UserDataSourceImpl(FakeUserDao)
+        UserDataSourceImpl(com.mito.login.preview.FakeUserDao)
     )
     val loginUseCase = LoginUseCase(repository)
 
@@ -319,28 +310,4 @@ fun LoginScreenPreview() {
         navController = NavHostController(LocalContext.current),
         viewModel = LoginViewModel(loginUseCase)
     )
-}
-
-class FakeLoginService : LoginService {
-
-    private val fakeMessage = "fake_token"
-    override suspend fun login(
-        loginRequest: LoginRequest,
-        contentType: String,
-    ): Response<LoginResponse> {
-        // Implementar lógica de login falso para la vista previa
-        return Response.success(LoginResponse(fakeMessage, "ok"))
-    }
-}
-
-object FakeUserDao : UserDao {
-    override fun getAll(): Flow<List<UserEntity>> = flowOf(emptyList())
-
-    override suspend fun getUserId(email: String, password: String): Int? = null
-
-    override suspend fun insert(user: UserEntity) = Unit
-
-    override suspend fun update(user: UserEntity) = Unit
-
-    override suspend fun delete(user: UserEntity) = Unit
 }
