@@ -68,6 +68,7 @@ import com.mito.network.auth.data.LoginService
 import com.mito.network.auth.data.request.LoginRequest
 import com.mito.network.auth.data.response.LoginResponse
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import retrofit2.Response
 import kotlin.system.exitProcess
 
@@ -333,23 +334,13 @@ class FakeLoginService : LoginService {
 }
 
 object FakeUserDao : UserDao {
-    override fun getAll(): Flow<List<UserEntity>> {
-        TODO("Not yet implemented")
-    }
+    override fun getAll(): Flow<List<UserEntity>> = flowOf(emptyList())
 
-    override suspend fun getUserId(email: String, password: String): Int? {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getUserId(email: String, password: String): Int? = null
 
-    override suspend fun insert(user: UserEntity) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun insert(user: UserEntity) = Unit
 
-    override suspend fun update(user: UserEntity) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun update(user: UserEntity) = Unit
 
-    override suspend fun delete(user: UserEntity) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun delete(user: UserEntity) = Unit
 }
