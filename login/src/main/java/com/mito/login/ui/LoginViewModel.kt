@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mito.common.tools.EMPTY_STRING
 import com.mito.common.usecase.Result
-import com.mito.login.domain.DummyLoginUseCase
+import com.mito.login.domain.LoginUseCase
 import com.mito.login.domain.Input
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @ExperimentalMaterial3Api
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val dummyLoginUseCase: DummyLoginUseCase,
+    private val loginUseCase: LoginUseCase,
 ) : ViewModel() {
 
     private val _status: MutableStateFlow<Status> = MutableStateFlow(Status())
@@ -34,7 +34,7 @@ class LoginViewModel @Inject constructor(
     @OptIn(ExperimentalMaterial3Api::class)
     fun login() {
         viewModelScope.launch {
-            dummyLoginUseCase(Input(status.value.username, status.value.password))
+            loginUseCase(Input(status.value.username, status.value.password))
                 .onStart {
                     _event.emit(Event.Loading)
                 }

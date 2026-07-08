@@ -11,7 +11,7 @@ import com.mito.common.tools.EMPTY_STRING
 import com.mito.common.tools.Gender
 import com.mito.common.tools.State
 import com.mito.login.domain.RegisterUserUseCase
-import com.mito.network.dummy_login.domain.User
+import com.mito.network.auth.domain.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -191,8 +191,8 @@ class NewUserViewModel @Inject constructor(
         viewModelScope.launch {
             val s = _status.value
             val gender = when (s.gender) {
-                Gender.MALE.toString() -> com.mito.network.dummy_login.domain.Gender.MALE
-                Gender.FEMALE.toString() -> com.mito.network.dummy_login.domain.Gender.FEMALE
+                Gender.MALE.toString() -> com.mito.network.auth.domain.Gender.MALE
+                Gender.FEMALE.toString() -> com.mito.network.auth.domain.Gender.FEMALE
                 else -> null
             }
             val user = User(

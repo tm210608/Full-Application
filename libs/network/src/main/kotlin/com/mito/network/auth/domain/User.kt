@@ -1,4 +1,4 @@
-package com.mito.network.dummy_login.domain
+package com.mito.network.auth.domain
 
 data class User(
     val name: String,
