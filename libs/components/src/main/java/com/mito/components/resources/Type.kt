@@ -1,4 +1,4 @@
-package com.mito.login.ui.tools
+package com.mito.components.resources
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -11,5 +11,6 @@ val headerTextHomeScreen = Typography(
         fontFamily = FontFamily.Monospace,
         fontWeight = FontWeight.SemiBold,
         fontSize = 25.sp,
-        letterSpacing = 3.sp)
+        letterSpacing = 3.sp
+    )
 )

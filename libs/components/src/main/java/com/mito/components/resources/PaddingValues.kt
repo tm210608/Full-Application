@@ -1,4 +1,4 @@
-package com.mito.login.ui.tools
+package com.mito.components.resources
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding

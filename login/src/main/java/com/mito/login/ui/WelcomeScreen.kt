@@ -49,8 +49,8 @@ import com.mito.components.resources.content_color_disabled
 import com.mito.core.navigation.AppInfo
 import com.mito.core.navigation.Screen
 import com.mito.login.R
-import com.mito.login.ui.tools.headerTextHomeScreen
-import com.mito.login.ui.tools.paddingDefault
+import com.mito.components.resources.headerTextHomeScreen
+import com.mito.components.resources.paddingDefault
 
 class WelcomeScreen : Screen {
     override val route: String = NavigationReferences.WelcomeReference.getRoute()
